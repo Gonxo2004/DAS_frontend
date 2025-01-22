@@ -19,7 +19,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         <body>
             <h1>Hola desde un servidor Python</h1>
             <p>Este es un servidor simple que responde a solicitudes GET.</p>
+            <img src=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbgYSxFe_Lq1HhKUf2z_cdbiCmbFX9Owtyxw&s>
             <p>Web de los Duros</p> 
+
         </body>
         </html>"""
 
@@ -38,3 +40,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nServidor detenido.")
         httpd.server_close()
+
+
