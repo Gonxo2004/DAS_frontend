@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Formulario de registro</title>
+    <link rel="icon" href="../imgs/logo.webp" type="image/x-icon">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="menu">
+            <ul>
+                <li><a class="active" href="#home">Home</a></li>
+                <li><a href="./registro.html">Registro</a></li>
+                <li><a href="./Login.html">Login</a></li>
+            </ul>
+        </nav>
+        <h1>SUBASTA LOS DUROS</h1>
+    </header>
+    <main>
+        <h1>Formulario de registro</h1>
+        <h3>Por favor, rellena los siguientes datos para registrarte en nuestro sistema</h3>
+        
+        <fieldset>
+            <form onsubmit="return compararContraseñas()">
+                <!-- Nombre -->
+                <label for="fname">Nombre:</label>
+                <input type="text" id="fname" name="fname" placeholder="Vinicius" required><br><br>
+
+                <!-- Apellidos -->
+                <label for="sname">Apellidos:</label>
+                <input type="text" id="sname" name="sname" placeholder="Junior" required><br><br>
+                
+                <!-- DNI/NIE -->
+                <label for="dni">DNI/NIE:</label>
+                <input type="text" id="dni" name="dni" placeholder="12345678A" required><br><br>
+
+                <!-- Fecha de nacimiento -->
+                <label for="fechanac">Fecha de nacimiento:</label>
+                <input type="date" id="fechanac" name="fechanac" required><br><br>
+
+                <!-- Usuario -->
+                <label for="usuario">Usuario:</label>
+                <input type="text" id="usuario" name="usuario" placeholder="vinijrcrack123" required><br><br>
+
+                <!-- Correo electrónico -->
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email" placeholder="vinijr23@gmail.com" required><br><br>
+
+                <!-- Dirección -->
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" name="direccion" placeholder="c/ Alberto Aguilera 23, Piso 3, 3º A" required><br><br>
+
+                <!-- Comunidad Autónoma (desplegable) -->
+                <label for="comunidad">Comunidad Autónoma:</label>
+                <select id="comunidad" name="comunidad" required>
+                    <option value="">-- Selecciona tu comunidad --</option>
+                    <option value="Andalucía">Andalucía</option>
+                    <option value="Aragón">Aragón</option>
+                    <option value="Asturias">Asturias</option>
+                    <option value="Baleares">Islas Baleares</option>
+                    <option value="Canarias">Islas Canarias</option>
+                    <option value="Cantabria">Cantabria</option>
+                    <option value="Castilla-La Mancha">Castilla-La Mancha</option>
+                    <option value="Castilla y León">Castilla y León</option>
+                    <option value="Cataluña">Cataluña</option>
+                    <option value="Comunidad de Madrid">Comunidad de Madrid</option>
+                    <option value="Comunidad Valenciana">Comunidad Valenciana</option>
+                    <option value="Extremadura">Extremadura</option>
+                    <option value="Galicia">Galicia</option>
+                    <option value="La Rioja">La Rioja</option>
+                    <option value="Murcia">Región de Murcia</option>
+                    <option value="Navarra">Navarra</option>
+                    <option value="País Vasco">País Vasco</option>
+                </select><br><br>
+
+                <!-- Ciudad (desplegable) -->
+                <label for="ciudad">Ciudad:</label>
+                <select id="ciudad" name="ciudad" required disabled>
+                    <option value="">-- Selecciona tu ciudad --</option>
+                    <!-- Las opciones se añaden dinámicamente con JavaScript -->
+                </select><br><br>
+
+                <script src="../js/comparar_ciudades.js"></script>
+
+                <!-- Contraseña -->
+                <label for="contraseña">Contraseña:</label>
+                <input type="password" id="contraseña" name="contraseña" minlength="8" required><br><br>
+
+                <!-- Confirmación contraseña -->
+                <label for="contraseña2">Confirmación contraseña:</label>
+                <input type="password" id="contraseña2" name="contraseña2" minlength="8" required><br>
+                
+                <p id="error_msg" style="color: red;"></p>
+
+                <!-- Subida de imagen -->
+                <label for="myfile">Imagen:</label>
+                <input type="file" id="myfile" name="myfile"><br><br>
+
+                <script src="../js/password.js"></script>
+                
+
+                <!-- Botones de envío y reseteo dentro del form -->
+                <input type="submit" value="Enviar">
+                <input type="reset" value="Reset">
+            </form>
+        </fieldset>
+        
+        <!-- Enlace de vuelta o a otra página -->
+        <a href="./Login.html"> 
+            <img src="../imgs/flecha.png" alt="flecha" width="30px" height="30px">
+        </a>
+    </main>
+
+    <footer>
+        Creado por <b>Gonzalo Borrachero y Luis García</b> - <i>2025</i>
+    </footer>
+</body>
+</html>
