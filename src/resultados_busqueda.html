@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Búsqueda</title>
+    <link rel="stylesheet" href="../css/resultado_busqueda.css">
+</head>
+<body>
+    <header>
+        <nav class="menu">
+            <ul>
+                <li><a class="active" href="#home">Home</a></li>
+            </ul>
+        </nav>
+        <h2>Detalles de Búsqueda</h2>
+    </header>
+    <main>
+        <aside id="filters">
+            <h3>Filtros</h3>
+            <form>
+                <label for="price">Rango de precios:</label>
+                <select id="price" name="price">
+                    <option value="0-50">0-50€</option>
+                    <option value="50-100">50-100€</option>
+                    <option value="100-200">100-200€</option>
+                    <option value="200+">200€ o más</option>
+                </select>
+
+                <label for="rating">Calificación:</label>
+                <select id="rating" name="rating">
+                    <option value="1">1 estrella o más</option>
+                    <option value="2">2 estrellas o más</option>
+                    <option value="3">3 estrellas o más</option>
+                    <option value="4">4 estrellas o más</option>
+                    <option value="5">Solo 5 estrellas</option>
+                </select>
+                <input type="submit" value="Aplicar filtros">
+            </form>
+        </aside>
+
+        <aside id="categories">
+            <h3>Categorías</h3>
+            <ul>
+                <li><a href="#electronics">Electrónica</a></li>
+                <li><a href="#home-garden">Hogar y Jardín</a></li>
+                <li><a href="#fashion">Moda</a></li>
+                <li><a href="#toys">Juguetes</a></li>
+            </ul>
+        </aside>
+
+        <section id="search-results">
+            <article class="product">
+                <h4>Producto 1</h4>
+                <img src="../imgs/producto1.jpg" alt="Imagen del Producto 1">
+                <p>Descripción breve del producto 1</p>
+                <p><strong>Precio:</strong> 49,99€</p>
+            </article>
+
+            <article class="product">
+                <h4>Producto 2</h4>
+                <img src="../imgs/producto2.jpg" alt="Imagen del Producto 2">
+                <p>Descripción breve del producto 2</p>
+                <p><strong>Precio:</strong> 99,99€</p>
+            </article>
+
+            <article class="product">
+                <h4>Producto 3</h4>
+                <img src="../imgs/producto3.jpg" alt="Imagen del Producto 3">
+                <p>Descripción breve del producto 3</p>
+                <p><strong>Precio:</strong> 24,99€</p>
+            </article>
+
+            <article class="product">
+                <h4>Producto 4</h4>
+                <img src="../imgs/producto4.jpg" alt="Imagen del Producto 4">
+                <p>Descripción breve del producto 4</p>
+                <p><strong>Precio:</strong> 149,99€</p>
+            </article>
+        </section>
+    </main>
+    <footer>
+        Creado por <b>Gonzalo Borrachero y Luis García</b> - <i>2025</i>
+    </footer>
+</body>
+</html>

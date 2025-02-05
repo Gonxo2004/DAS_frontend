@@ -46,6 +46,5 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // Llamamos a la función para que haga el "enganche" de eventos
     comparar_ciudades();
 });

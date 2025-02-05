@@ -1,0 +1,226 @@
+/* =========================
+   Estilos globales
+   ========================= */
+   html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #051220;
+}
+
+/* =========================
+   ENCABEZADO
+   ========================= */
+header {
+    background-color: #e9ecef;
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+header h2 {
+    color: #3e4b5a;
+    font-size: 2rem;
+    margin: 0;
+}
+
+/* Menú de navegación */
+.menu {
+    background-color: rgb(40, 55, 78);
+    padding: 10px 0;
+    margin-bottom: 10px;
+    /* Si no quieres que sobrescriba el fondo gris del header,
+       puedes moverlo fuera o personalizarlo. */
+}
+
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 15px;
+    display: flex;
+    justify-content: left;
+}
+
+.menu li {
+    margin-right: 15px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.menu a:hover {
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 237, 133);
+}
+
+.menu a.active {
+    background-color: #48c19a;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+}
+
+/* =========================
+   CONTENEDOR PRINCIPAL
+   ========================= */
+main {
+    /* Para centrar un contenedor con varios elementos en horizontal */
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
+    flex: 1; /* para que ocupe la parte central del layout */
+    display: flex;
+    gap: 20px; /* separación entre secciones (filtros, categorías, resultados) */
+}
+
+/* =========================
+   FILTROS (aside#filters)
+   ========================= */
+#filters {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 20px;
+    width: 250px; /* Ajusta según tu preferencia */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#filters h3 {
+    margin-top: 0;
+    color: #3e4b5a;
+    font-size: 1.2rem;
+}
+
+#filters form {
+    display: flex;
+    flex-direction: column;
+}
+
+#filters label {
+    margin: 10px 0 5px;
+}
+
+#filters select {
+    padding: 6px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+#filters input[type="submit"] {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #0051a7;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+#filters input[type="submit"]:hover {
+    background-color: #6cabff;
+}
+
+/* =========================
+   CATEGORÍAS (aside#categories)
+   ========================= */
+#categories {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 20px;
+    width: 200px; /* Ajusta según tu preferencia */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#categories h3 {
+    margin-top: 0;
+    color: #3e4b5a;
+    font-size: 1.2rem;
+}
+
+#categories ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#categories li {
+    margin: 10px 0;
+}
+
+#categories a {
+    text-decoration: none;
+    color: #0051a7;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+#categories a:hover {
+    color: #003d80;
+}
+
+/* =========================
+   RESULTADOS (section#search-results)
+   ========================= */
+#search-results {
+    flex: 1; /* Ocupa todo el espacio sobrante */
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    /* Ajusta minmax para definir el ancho mínimo de un producto
+       y lograr un diseño responsive. */
+}
+
+#search-results .product {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    text-align: center;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#search-results .product h4 {
+    margin-top: 0;
+    color: #3e4b5a;
+}
+
+#search-results .product img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+#search-results .product p {
+    margin: 5px 0;
+    color: #051220;
+}
+
+#search-results .product strong {
+    color: #0051a7;
+}
+
+/* =========================
+   PIE DE PÁGINA
+   ========================= */
+footer {
+    text-align: center;
+    color: #868e96;
+    background-color: #e9ecef;
+    font-size: 0.9rem;
+    padding: 10px;
+    border-top: 1px solid #dee2e6;
+    width: 100%;
+    margin-top: auto; /* Empuja el footer al final */
+}
