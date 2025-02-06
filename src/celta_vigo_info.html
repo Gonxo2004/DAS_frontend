@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Camiseta del Celta de Vigo - Detalles</title>
+  <link rel="stylesheet" href="../css/resultado_busqueda.css">
+
+</head>
+<body>
+    <header>
+        <nav class="menu">
+            <ul>
+                <li><a class="active" href="#home">Home</a></li>
+            </ul>
+        </nav>
+        <h2>Detalles de Búsqueda</h2>
+    </header>
+
+  <main>
+
+    <script src="../js/busquedas.js"></script>
+    <div class="container">
+      <!-- Sección de imágenes -->
+      <div class="images-section">
+        <!-- Imagen principal grande -->
+        <img 
+          src= "../imgs/celta_info/marcos.png"
+          alt="Camiseta del Celta de Vigo - Vista principal" 
+          class="main-image" 
+          id="mainImage"
+        >
+        
+        <div class="thumbnails">
+          <img 
+            src="../imgs/celta_info/marcos.png" 
+            alt="Vista dorsal"
+            onclick="changeImage(this.src)"
+          > 
+          <img 
+            src="../imgs/celta_info/aspas.png" 
+            alt="Aspas"
+            onclick="changeImage(this.src)"
+          >
+          <img 
+            src="../imgs/celta_info/back.png" 
+            alt="Vista trasera"
+            onclick="changeImage(this.src)"
+          >
+        </div>
+      </div>
+
+      <!-- Sección de información -->
+      <div class="info-section">
+        <h2>Equipación Oficial Temporada Actual</h2>
+        <p>
+          Esta camiseta del RC Celta de Vigo es la más reciente para la temporada en curso. 
+          Está confeccionada en un tejido ligero y transpirable que asegura la comodidad 
+          durante todo el partido, incluso en las condiciones más exigentes. 
+          El diseño respeta los colores icónicos del club y presenta detalles finos 
+          que homenajean la tradición celeste y la pasión de su afición.
+        </p>
+        <p>
+          El escudo bordado y las terminaciones de alta calidad demuestran la atención al detalle 
+          en cada puntada. Es perfecta tanto para lucir en el estadio como para coleccionistas 
+          que quieran sumar a su vitrina un trocito de historia del fútbol español.
+        </p>
+        <p>
+          <strong>Precio mínimo para la puja:</strong> 49,99€
+        </p>
+        <input type="text" id="bidAmount" placeholder="Introduce tu puja" min="49.99" step="0.01">
+        <p id="bid_message" style="color: green;"></p>
+        <!-- Botón para pujar -->
+        <button class="bid-button" id="bidButton">¡Pujar ahora!</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+
+    // Ejemplo de uso del botón "Pujar" (se podría redirigir a una página de pujas)
+    const bidButton = document.getElementById('bidButton');
+    const bidAmount = document.getElementById('bidAmount');
+    const bidMessage = document.getElementById('bid_message');
+
+  </script>
+</body>
+</html>
