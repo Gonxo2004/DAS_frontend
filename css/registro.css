@@ -31,13 +31,18 @@ header h3 {
   margin: 0;
 }
 
+a img{
+  text-align: left;
+  margin-left: 10px;
+}
+
 main {
   flex: 1;
   background: #ffffff;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 90%;
+  width: 70%;
   max-width: 1200px;
   min-width: 320px;
   margin: 0 auto;
@@ -49,6 +54,7 @@ fieldset {
   border-radius: 8px;
   padding: 30px;
   margin-bottom: 20px;
+  text-align: left;
 }
 
 label {
@@ -58,7 +64,7 @@ label {
 }
 
 select {
-  width: 100%;
+  width: 70%;
   padding: 6px;
   margin-bottom: 10px;
   border: 1px solid #ced4da;
@@ -70,7 +76,7 @@ input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="file"] {
-  width: 100%;
+  width: 70%;
   padding: 6px;
   margin-bottom: 10px;
   border: 1px solid #ced4da;
@@ -80,10 +86,10 @@ input[type="file"] {
 input[type="submit"],
 input[type="reset"] {
   padding: 10px 20px;
-  margin: 5px;
+  margin-left: 30px;
   border: none;
   border-radius: 4px;
-  background-color: #ffaa00;
+  background-color: #ff6600;
   color: white;
   cursor: pointer;
   font-size: 1rem;
@@ -95,9 +101,12 @@ input[type="reset"]:hover {
   color: #ffffff;
 }
 
-a img {
-  margin-top: 10px;
-  transition: transform 0.2s ease-in-out;
+
+.home-logo{
+  width: 100px;
+  height: 70px;
+  margin-top: 0%;
+  border-radius: 120px;
 }
 
 footer {
@@ -112,7 +121,7 @@ footer {
   margin-left: 0%;
 }
 
-.menu {
+.navbar {
   position: sticky;
   top: 0;
   overflow: hidden;
@@ -121,20 +130,7 @@ footer {
   text-align: left;
 }
 
-.menu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0; /* 🔹 Elimina el espacio extra dentro del ul */
-  display: flex;
-  justify-content: left;
-}
-
-.menu li {
-  margin: 0; /* 🔹 Elimina el espacio extra entre los elementos */
-  padding: 0;
-}
-
-.menu a {
+.navbar a {
   float: left;
   display: block;
   color: #ffebc1;
@@ -144,16 +140,32 @@ footer {
   font-size: 17px;
 }
 
-.menu a:hover {
+.navbar a:hover {
   background-color: #ffebc1;
   color: black;
 }
 
-.menu a.active {
-  background-color: #ffaa00;
+.navbar a.active {
+  background-color: #ff6600;
   color: white;
   font-weight: bold;
+}
+
+.navbar a.home:hover {
+  background-color: inherit; /* No cambia el color */
+  color: inherit; /* Mantiene el color original */
+  text-decoration: none; /* No se subraya */
 }
 .content {
   padding: 16px;
 }
+  
+   
+   
+
+
+
+
+
+
+

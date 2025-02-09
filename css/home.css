@@ -3,8 +3,8 @@ body {
     font-family: Arial, sans-serif;
   }
   
-/* header.css */
-.header {
+
+.eslogan {
     position: relative;
     /* Reemplaza la ruta con la de tu imagen */
     background: url("../imgs/home.webp") no-repeat center center;
@@ -16,40 +16,51 @@ body {
   }
   
   /* Overlay oscuro para dar un poco de opacidad */
-  .header::before {
+  .eslogan::before {
     content: "";
     position: absolute;
     top: 0; 
     left: 0;
     width: 100%; 
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Opacidad del overlay */
+    background-color: rgba(0, 0, 0, 0.75); /* Opacidad del overlay */
     z-index: 0; /* Para que quede por detrás del texto */
   }
   
   /* Aseguramos que el texto esté por encima del overlay */
-  .header h1 {
+  .eslogan h1 {
     position: relative;
     z-index: 1;
     font-family: 'Baskerville', cursive, sans-serif; /* Fuente divertida */
     color: #ffebc1;
-  }
-  
-  /* Ajustamos tamaños de fuente */
-  .header h1 {
     font-size: 4rem; /* Texto grande */
     margin: 0 0 20px;
   }
+
+  .home-logo{
+    width: 100px;
+    height: 70px;
+    margin-top: 0%;
+    border-radius: 120px;
+
+  }
   
-  #navbar {
+  a img {
+    width: 80px;
+    height: 50px;
+    margin-top: 0%;
+  }
+  
+  .navbar {
     position: sticky;
     top: 0;
     overflow: hidden;
     background-color: rgb(0, 0, 0);
     padding: 14px 16px;
+    text-align: left;
   }
   
-  #navbar a {
+  .navbar a {
     float: left;
     display: block;
     color: #ffebc1;
@@ -59,20 +70,129 @@ body {
     font-size: 17px;
   }
   
-  #navbar a:hover {
+  .navbar a:hover {
     background-color: #ffebc1;
     color: black;
   }
-  
-  #navbar a.active {
-    background-color: #ffaa00;
-    color: white;
-  }
+
+  .navbar a.home:hover {
+    background-color: inherit; /* No cambia el color */
+    color: inherit; /* Mantiene el color original */
+    text-decoration: none; /* No se subraya */
+}
   
   .content {
     padding: 16px;
   }
 
+  .search-bar {
+    margin-top: 6px;
+    margin-left: 170px;
+    width: 400px;
+    padding: 8px;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+}
+
+.search-button {
+    background: none;
+    border: none;
+    font-size: 25px;
+    cursor: pointer;
+    margin-left: 1px;
+    color: rgb(255, 255, 255);
+}
+main {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.categorias {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.categoria-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.categoria-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.categoria-item img {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.categoria-item:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.productos-destacados {
+  text-align: center;
+}
+
+.productos-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.producto {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 200px;
+}
+
+.producto img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.producto h3 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.producto p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #ff6600;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #050505;
+}
 
 footer {
     text-align: center;

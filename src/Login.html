@@ -2,21 +2,20 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Login</title>
     <link rel="icon" href="logo.webp" type="image/x-icon">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/login.css">
   </head>
   <body>
     <header>
-      <nav class="menu">
-        <ul>
-        <li><a href="./index.html">Home</a></li>
-        <li><a href="./resultados_busqueda.html">Mas buscados</a></li>
-        <li><a href="./registro.html">Registro</a></li>
-        <li><a class = "active" href="./Login.html">Login</a></li>
-        
-        
-        </ul>
+      <nav class="navbar">
+        <a class= "home" href="./index.html">
+          <img class = "home-logo" src="../imgs/home-logo.webp" alt="Home">
+        </a>
+        <a href="./resultados_busqueda.html">Más buscados</a>
+        <a href="./registro.html">Registro</a></li>
+        <a class = "active" href="./Login.html">Login</a>
       </nav>
       <h1>SUBASTA LOS DUROS</h1>
     </header>
@@ -25,9 +24,10 @@
       <h2>Introduce tu usuario y contraseña</h2>
       <form>  
         <label for="usuario">Usuario:</label>
-        <input type="text" id="usuario" name="usuario">
+        <input type="text" id="usuario" name="usuario" placeholder="vinijr23" required>
         <label for="contraseña">Contraseña:</label>
-        <input type="password" id="contraseña" name="contraseña">
+        <input type="password" id="contraseña" name="contraseña" placeholder="Contraseña" required><br><br>
+        <a href="../src/registro.html">¿No tiene cuenta?</a><br><br>
         <input type="submit" value="Enviar">
       </form><br>
     </main>

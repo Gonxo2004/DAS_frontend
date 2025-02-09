@@ -9,11 +9,17 @@
 </head>
 <body>
     <header>
-      <nav class="menu">
-        <a href="./index.html">Home</a>
-        <a href="./resultados_busqueda.html">Mas buscados</a>
+      <nav class="navbar">
+        <a class= "home" href="./index.html">
+          <img class = "home-logo" src="../imgs/home.webp" alt="Home">
+        </a>
+        <a href="./resultados_busqueda.html">Más buscados</a>
         <a href="./registro.html">Registro</a>
         <a href="./Login.html">Login</a>
+        <div class="search-container">
+          <input type="text" placeholder="Buscar..." class="search-bar">
+          <button type="submit" class="search-button">🔍</button>
+        </div>
         
       </nav>
         <h1>Camiseta Celta de Vigo</h1>
@@ -78,13 +84,5 @@
     </div>
   </main>
 
-  <script>
-
-    // Ejemplo de uso del botón "Pujar" (se podría redirigir a una página de pujas)
-    const bidButton = document.getElementById('bidButton');
-    const bidAmount = document.getElementById('bidAmount');
-    const bidMessage = document.getElementById('bid_message');
-
-  </script>
 </body>
 </html>
