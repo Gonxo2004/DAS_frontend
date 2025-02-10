@@ -8,7 +8,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: center; /* Centra los elementos horizontalmente */
+  justify-content: center;
 }
 
 .images-section,
@@ -82,9 +82,7 @@
   background-color: #6cabff;
 }
 
-/* =========================
-     Estilos globales
-     ========================= */
+
 html,
 body {
   height: 100%;
@@ -97,9 +95,6 @@ body {
   background-color: #474747;
 }
 
-/* =========================
-     ENCABEZADO
-     ========================= */
 header {
   background-color: rgb(0, 0, 0);
   text-align: center;
@@ -158,9 +153,9 @@ a img {
 }
 
 .navbar a.home:hover {
-  background-color: inherit; /* No cambia el color */
-  color: inherit; /* Mantiene el color original */
-  text-decoration: none; /* No se subraya */
+  background-color: inherit; 
+  color: inherit; 
+  text-decoration: none; 
 }
 
 .content {
@@ -169,7 +164,7 @@ a img {
 
 .search-bar {
   margin-top: 6px;
-  margin-left: 170px;
+  margin-left: 110px;
   width: 400px;
   padding: 8px;
   border: none;
@@ -186,9 +181,6 @@ a img {
   color: rgb(255, 255, 255);
 }
 
-/* =========================
-     CONTENEDOR PRINCIPAL
-     ========================= */
 main {
   width: 90%;
   max-width: 1200px;
