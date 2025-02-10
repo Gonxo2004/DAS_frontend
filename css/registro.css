@@ -1,0 +1,170 @@
+/* Estilos generales */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  background-color: #474747;
+  color: #051220;
+}
+
+/* Header con padding y fondo claro */
+header {
+  background-color: rgb(0, 0, 0);
+  text-align: center;
+  padding: 20px 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+header h1 {
+  color: #ffffff;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+header h3 {
+  color: #9ca4ab;
+  font-size: 1rem;
+  margin: 0;
+}
+
+a img{
+  text-align: left;
+  margin-left: 10px;
+}
+
+main {
+  flex: 1;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 70%;
+  max-width: 1200px;
+  min-width: 320px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+fieldset {
+  border: 1px solid #bdbdbd;
+  border-radius: 8px;
+  padding: 30px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin: 10px 0 5px;
+  text-align: left;
+}
+
+select {
+  width: 70%;
+  padding: 6px;
+  margin-bottom: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+input[type="date"],
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="file"] {
+  width: 70%;
+  padding: 6px;
+  margin-bottom: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+input[type="submit"],
+input[type="reset"] {
+  padding: 10px 20px;
+  margin-left: 30px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ff6600;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.home-logo {
+  width: 60px;
+  height: auto;
+  margin-right: 16px; 
+  border-radius: 50px; 
+}
+
+footer {
+  text-align: center;
+  color: #ffebc1;
+  background-color: #000000;
+  font-size: 0.9rem;
+  padding: 10px;
+  border-top: 1px solid #dee2e6;
+  width: 100%;
+  margin-bottom: 0%;
+  margin-left: 0%;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  background-color: #000;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+}
+.navbar a {
+  float: left;
+  display: block;
+  color: #ffebc1;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.navbar a:hover {
+  background-color: #ffebc1;
+  color: black;
+}
+
+.navbar a.active {
+  background-color: #ff6600;
+  color: white;
+  font-weight: bold;
+}
+
+.navbar a.home:hover {
+  background-color: inherit; /* No cambia el color */
+  color: inherit; /* Mantiene el color original */
+  text-decoration: none; /* No se subraya */
+}
+.content {
+  padding: 16px;
+}
+  
+   
+   
+
+
+
+
+
+
+
