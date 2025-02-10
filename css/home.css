@@ -140,7 +140,7 @@ main {
 }
 
 .categoria-item:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 

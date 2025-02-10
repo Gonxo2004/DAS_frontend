@@ -223,6 +223,10 @@ input[type="reset"]:hover {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+#search-results :hover {
+  transform: scale(1.02);
+}
+
 #search-results .product h4 {
   margin-top: 0;
   color: #3e4b5a;
