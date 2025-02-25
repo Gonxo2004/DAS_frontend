@@ -30,8 +30,8 @@ export default function Home() {
             />
           </Link>
 
-          <Link href="/resultados_busqueda">Más buscados</Link>
-          <Link href="/registro">Registro</Link>
+          <Link href="./registro/page.js">Más buscados</Link>
+          <Link href="./registro/page.js">Registro</Link>
           <Link href="/login">Login</Link>
 
           <div className="search-container">
