@@ -1,94 +1,118 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+// app/page.js
+"use client"; // si necesitas usar funciones del lado del cliente (eventos, etc.)
+
+import React from "react";
+import Link from "next/link";
+import "./globals.css"; // Tus estilos globales o bien un .module.css
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+    <div>
+      {/* No es usual poner <html> o <head> aquí 
+          porque Next.js 13 gestiona esa parte en layout.js 
+          o con <head> dentro de page.js si así lo deseas.
+       */}
+      <header>
+        <div className="eslogan">
+          <h1>PUJA FUERTE Y GANA DURO</h1>
         </div>
+
+        <nav className="navbar">
+          {/* Nota: En Next.js se recomienda usar <Link> en lugar de <a> 
+              para navegación interna. Pero si el archivo es puramente 
+              estático, podrías dejar <a>. 
+          */}
+          <Link className="home" href="/">
+            <img
+              className="home-logo"
+              src="/imgs/home-logo.webp"
+              alt="Home"
+            />
+          </Link>
+
+          <Link href="/resultados_busqueda">Más buscados</Link>
+          <Link href="/registro">Registro</Link>
+          <Link href="/login">Login</Link>
+
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Buscar..."
+              className="search-bar"
+            />
+            <button type="submit" className="search-button">
+              🔍
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        <section className="categorias">
+          <h2>Explora por Categorías</h2>
+          <div className="categoria-grid">
+            <a href="#" className="categoria-item">
+              <img src="/imgs/categorias/electronica.png" alt="Electrónica" />
+              <br />
+              <span>Electrónica</span>
+            </a>
+            <a href="#" className="categoria-item">
+              <img src="/imgs/categorias/moda.png" alt="Moda" />
+              <br />
+              <span>Moda</span>
+            </a>
+            <a href="#" className="categoria-item">
+              <img src="/imgs/categorias/casa.png" alt="Hogar" />
+              <br />
+              <span>Hogar</span>
+            </a>
+            <a href="#" className="categoria-item">
+              <img src="/imgs/categorias/deportes.avif" alt="Deportes" />
+              <br />
+              <span>Deportes</span>
+            </a>
+          </div>
+        </section>
+
+        <section className="productos-destacados">
+          <h2>Subastas Destacadas</h2>
+          <div className="productos-grid">
+            <div className="producto">
+              <img src="/imgs/destacadas/rolex.jpg" alt="Reloj de lujo" />
+              <h3>Reloj Rolex</h3>
+              <p>
+                Oferta actual: <strong>2,500€</strong>
+              </p>
+              <a href="#" className="btn">
+                Pujar Ahora
+              </a>
+            </div>
+            <div className="producto">
+              <img src="/imgs/destacadas/moto.avif" alt="Moto deportiva" />
+              <h3>Moto Yamaha</h3>
+              <p>
+                Oferta actual: <strong>7,200€</strong>
+              </p>
+              <a href="#" className="btn">
+                Pujar Ahora
+              </a>
+            </div>
+            <div className="producto">
+              <img src="/imgs/destacadas/camara.jpg" alt="Cámara profesional" />
+              <h3>Cámara Sony</h3>
+              <p>
+                Oferta actual: <strong>1,800€</strong>
+              </p>
+              <a href="#" className="btn">
+                Pujar Ahora
+              </a>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer>
+        Creado por <b>Gonzalo Borrachero y Luis García</b> - <i>2025</i>
       </footer>
     </div>
   );
