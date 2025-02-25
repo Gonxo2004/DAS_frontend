@@ -3,7 +3,7 @@
 
 import React from "react";
 import Link from "next/link";
-import "./globals.css"; // Tus estilos globales o bien un .module.css
+import "./page.module.css"; // Tus estilos globales o bien un .module.css
 
 export default function Home() {
   return (
