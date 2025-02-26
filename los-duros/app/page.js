@@ -16,7 +16,7 @@ export default function Home() {
         <div className="eslogan">
           <h1>PUJA FUERTE Y GANA DURO</h1>
         </div>
-
+        
         <nav className="navbar">
           {/* Nota: En Next.js se recomienda usar <Link> en lugar de <a> 
               para navegación interna. Pero si el archivo es puramente 
@@ -30,8 +30,8 @@ export default function Home() {
             />
           </Link>
 
-          <Link href="./registro/page.js">Más buscados</Link>
-          <Link href="./registro/page.js">Registro</Link>
+          <Link href="/subastas">Más buscados</Link>
+          <Link href="/registro">Registro</Link>
           <Link href="/login">Login</Link>
 
           <div className="search-container">

@@ -3,7 +3,8 @@
    ========================= */
    :root {
     --background: #474747; /* Fondo por defecto */
-    --foreground: #051220; /* Texto por defecto */
+    --foreground: #000000; /* Texto por defecto */
+    
   }
   
   @media (prefers-color-scheme: dark) {
@@ -59,6 +60,7 @@
     width: 80px;
     height: 50px;
     text-align: left;
+    color: #000;
   }
   
   /* =========================
