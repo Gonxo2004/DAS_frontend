@@ -1,32 +1,31 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import styles from "./page.module.css"; 
-import "../globals.css"; 
-
-
+import Reader from "../../components/Reader";
+import styles from "./page.module.css";
 
 const ciudadesPorComunidad = {
-    "Andalucía": ["Sevilla", "Málaga", "Córdoba", "Granada", "Cádiz"],
-    "Aragón": ["Zaragoza", "Huesca", "Teruel"],
-    "Asturias": ["Oviedo", "Gijón", "Avilés"],
-    "Canarias": ["Santa Cruz de Tenerife", "Las Palmas de Gran Canaria"],
-    "Cantabria": ["Santander", "Torrelavega"],
-    "Castilla-La Mancha": ["Albacete", "Ciudad Real", "Toledo"],
-    "Castilla y León": ["Valladolid", "Burgos", "Salamanca", "León"],
-    "Cataluña": ["Barcelona", "Tarragona", "Girona", "Lleida"],
-    "Comunidad de Madrid": ["Madrid", "Alcalá de Henares", "Getafe", "Móstoles"],
-    "Comunidad Valenciana": ["Valencia", "Alicante", "Castellón"],
-    "Extremadura": ["Badajoz", "Cáceres", "Mérida"],
-    "Galicia": ["Santiago de Compostela", "A Coruña", "Vigo"],
-    "La Rioja": ["Logroño", "Calahorra"],
-    "Murcia": ["Murcia", "Cartagena", "Lorca"],
-    "Navarra": ["Pamplona", "Tudela"],
-    "País Vasco": ["Bilbao", "San Sebastián", "Vitoria"],
-  };
+  "Andalucía": ["Sevilla", "Málaga", "Córdoba", "Granada", "Cádiz"],
+  "Aragón": ["Zaragoza", "Huesca", "Teruel"],
+  "Asturias": ["Oviedo", "Gijón", "Avilés"],
+  "Canarias": ["Santa Cruz de Tenerife", "Las Palmas de Gran Canaria"],
+  "Cantabria": ["Santander", "Torrelavega"],
+  "Castilla-La Mancha": ["Albacete", "Ciudad Real", "Toledo"],
+  "Castilla y León": ["Valladolid", "Burgos", "Salamanca", "León"],
+  "Cataluña": ["Barcelona", "Tarragona", "Girona", "Lleida"],
+  "Comunidad de Madrid": ["Madrid", "Alcalá de Henares", "Getafe", "Móstoles"],
+  "Comunidad Valenciana": ["Valencia", "Alicante", "Castellón"],
+  "Extremadura": ["Badajoz", "Cáceres", "Mérida"],
+  "Galicia": ["Santiago de Compostela", "A Coruña", "Vigo"],
+  "La Rioja": ["Logroño", "Calahorra"],
+  "Murcia": ["Murcia", "Cartagena", "Lorca"],
+  "Navarra": ["Pamplona", "Tudela"],
+  "País Vasco": ["Bilbao", "San Sebastián", "Vitoria"],
+};
 
 export default function Registro() {
-  // Estados
+  // Estados para el formulario
   const [comunidad, setComunidad] = useState("");
   const [ciudades, setCiudades] = useState([]);
 
@@ -42,12 +41,13 @@ export default function Registro() {
   const [email, setEmail] = useState("");
   const [direccion, setDireccion] = useState("");
 
-  // Efectos
+  // Actualiza la lista de ciudades al cambiar la comunidad
   useEffect(() => {
     const lista = ciudadesPorComunidad[comunidad] || [];
     setCiudades(lista);
   }, [comunidad]);
 
+  // Comprueba que las contraseñas coincidan
   useEffect(() => {
     if (pass1 && pass2 && pass1 !== pass2) {
       setErrorMsg("Las contraseñas no coinciden");
@@ -64,23 +64,10 @@ export default function Registro() {
   }
 
   return (
-    <div>
-      <header>
-        <nav className={styles.navbar}>
-          <a className="home" href="./index.html">
-            <img className={styles.homeLogo} src="/imgs/home-logo.webp" alt="Home" />
-          </a>
-          <a href="/resultados_busqueda">Más buscados</a>
-          <a className={styles.active} href="/registro">Registro</a>
-          <a href="/login">Login</a>
-        </nav>
-        <h1>SUBASTA LOS DUROS</h1>
-      </header>
-
+    <Reader>
       <main className={styles.mainRegistro}>
         <h1>Formulario de registro</h1>
         <h3>Por favor, rellena los siguientes datos para registrarte</h3>
-
         <fieldset>
           <form onSubmit={handleSubmit}>
             {/* Nombre */}
@@ -184,7 +171,7 @@ export default function Registro() {
               />
             </div>
 
-            {/* Dirección (full-width) */}
+            {/* Dirección */}
             <div className={`${styles.formGroup} ${styles.fullWidth}`}>
               <label className={styles.labelText} htmlFor="direccion">
                 Dirección:
@@ -216,7 +203,9 @@ export default function Registro() {
               >
                 <option value="">-- Selecciona tu comunidad --</option>
                 {Object.keys(ciudadesPorComunidad).map((com) => (
-                  <option key={com} value={com}>{com}</option>
+                  <option key={com} value={com}>
+                    {com}
+                  </option>
                 ))}
               </select>
             </div>
@@ -235,7 +224,9 @@ export default function Registro() {
               >
                 <option value="">-- Selecciona tu ciudad --</option>
                 {ciudades.map((c) => (
-                  <option key={c} value={c}>{c}</option>
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
                 ))}
               </select>
             </div>
@@ -280,9 +271,15 @@ export default function Registro() {
               <label className={styles.labelText} htmlFor="myfile">
                 Imagen:
               </label>
-              <input className={styles.inputField} type="file" id="myfile" name="myfile" />
+              <input
+                className={styles.inputField}
+                type="file"
+                id="myfile"
+                name="myfile"
+              />
             </div>
 
+            {/* Acciones del formulario */}
             <div className={styles.formActions}>
               <Link href="/login">
                 <img
@@ -298,10 +295,6 @@ export default function Registro() {
           </form>
         </fieldset>
       </main>
-
-      <footer>
-        Creado por <b>Gonzalo Borrachero y Luis García</b> - <i>2025</i>
-      </footer>
-    </div>
+    </Reader>
   );
 }
