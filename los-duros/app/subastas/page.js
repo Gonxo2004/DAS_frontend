@@ -1,8 +1,9 @@
-"use client";
+"use client"; // Necesario en App Router si usas useState y useEffect
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import styles from "./page.module.css"; // O el CSS que estés usando
+import Reader from "../../components/Reader"; // Ajusta la ruta de Reader según corresponda
+import styles from "./page.module.css"; // Ajusta el path a tu CSS
 
 export default function SearchResults() {
   const [products, setProducts] = useState([]);
@@ -29,77 +30,55 @@ export default function SearchResults() {
   );
 
   return (
-    <div>
-      <header>
-        <nav className={styles.navbar}>
-          <Link className={styles.home} href="/">
-            <img
-              className={styles.homeLogo}
-              src="/imgs/home-logo.webp"
-              alt="Home"
-            />
-          </Link>
-          <Link className={styles.active} href="/resultados_busqueda">
-            Más buscados
-          </Link>
-          <Link href="/registro">Registro</Link>
-          <Link href="/login">Login</Link>
-          <div className={styles.searchContainer}>
-            <input
-              type="text"
-              placeholder="Buscar..."
-              className={styles.searchBar}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button type="submit" className={styles.searchButton}>
-              🔍
-            </button>
-          </div>
-        </nav>
-        <h1>Detalles de Búsqueda</h1>
-      </header>
+    <Reader>
+      <div>
+          <main>
+          {loading ? (
+            <p>Cargando productos...</p>
+          ) : (
+            <section id="search-results" className={styles.searchResults}>
+              {filteredProducts.map((product) => (
+                <article key={product.id} className={styles.product}>
+                  <h4>{product.title}</h4>
 
-      <main>
-        {loading ? (
-          <p>Cargando productos...</p>
-        ) : (
-          <section id="search-results" className={styles.searchResults}>
-            {filteredProducts.map((product) => (
-              <article key={product.id} className={styles.product}>
-                <h4>{product.title}</h4>
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  onClick={() =>
-                    window.location.assign(`/product/${product.id}`)
-                  }
-                />
-                <p>{product.description}</p>
-                <p>
-                  <strong>Precio mínimo para la puja:</strong> {product.price}€
-                </p>
-                <input
-                  type="button"
-                  value="See Details"
-                  onClick={() =>
-                    window.location.assign(`/product/${product.id}`)
-                  }
-                />
-                <input
-                  type="button"
-                  value="Add to Wishlist"
-                  onClick={() => console.log("Added to wishlist:", product.id)}
-                />
-              </article>
-            ))}
-          </section>
-        )}
-      </main>
+                  {/* Link para ir a /subastas/[id] */}
+                  <Link href={`/subastas/${product.id}`}>
+                    <img
+                      src={product.image}
+                      alt={product.title}
+                      className={styles.clickableImg}
+                    />
+                  </Link>
 
-      <footer>
-        Creado por <b>Gonzalo Borrachero y Luis García</b> - <i>2025</i>
-      </footer>
-    </div>
+                  <p>{product.description}</p>
+                  <p>
+                    <strong>Precio mínimo para la puja:</strong> {product.price}€
+                  </p>
+
+                  {/* Botón "See Details" con <input type="button"> */}
+                  <Link href={`/subastas/${product.id}`}>
+                    <input
+                      type="button"
+                      value="See Details"
+                      className={styles.detailsButton}
+                    />
+                  </Link>
+
+                  <input
+                    type="button"
+                    value="Add to Wishlist"
+                    onClick={() => console.log("Added to wishlist:", product.id)}
+                  />
+                </article>
+              ))}
+            </section>
+          )}
+        </main>
+
+        <footer>
+          Creado por <b>Gonzalo Borrachero y Luis García</b> - <i>2025</i>
+        </footer>
+      </div>
+    </Reader>
   );
 }

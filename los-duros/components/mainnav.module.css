@@ -44,4 +44,9 @@
     margin-right: 16px;
     border-radius: 50px;
   }
+
+  .navbar a.active:hover {
+    background-color: #ffebc1;
+    color: black;
+  }
   
