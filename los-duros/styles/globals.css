@@ -1,0 +1,31 @@
+header {
+    background-color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  h1 {
+    color: #fff;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+  
+  main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  footer {
+    text-align: center;
+    color: #ffebc1;
+    background-color: #000;
+    font-size: 0.9rem;
+    padding: 10px;
+    border-top: 1px solid #dee2e6;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+  }
