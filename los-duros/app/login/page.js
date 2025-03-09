@@ -22,10 +22,7 @@ export default function Login() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            username: username,
-            password: password,
-          }),
+          body: JSON.stringify({ username, password }),
         }
       );
   
@@ -41,15 +38,16 @@ export default function Login() {
       const data = await response.json();
       console.log("Datos de login recibidos:", data);
   
-      // Guardamos el token en localStorage
+      // Guardamos el token y los datos de usuario en localStorage
       localStorage.setItem("token", data.access);
       localStorage.setItem("username", data.username);
+      // Aseguramos almacenar el first_name para el mensaje de bienvenida
+      localStorage.setItem("first_name", data.first_name);
   
-      console.log("Token guardado en localStorage");
+      console.log("Datos guardados en localStorage");
   
-      // Redirigir a la página principal
+      // Redirige a la página principal y fuerza recarga para actualizar componentes
       router.push("/");
-      // Forzar recarga para que el Navbar se remonte y lea el token
       window.location.reload();
   
     } catch (error) {
@@ -58,14 +56,12 @@ export default function Login() {
     }
   }
   
-  
-
   return (
     <Reader>
       <main className={styles.mainLogin}>
         <h1>Formulario de Login</h1>
         <h2>Introduce tu usuario y contraseña</h2>
-
+  
         <form onSubmit={handleSubmit}>
           <label className={styles.labelText} htmlFor="usuario">
             Usuario:
@@ -80,7 +76,7 @@ export default function Login() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-
+  
           <label className={styles.labelText} htmlFor="contraseña">
             Contraseña:
           </label>
@@ -94,16 +90,16 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
+  
           {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
-
+  
           <br />
           <a className={styles.linkRegistro} href="/registro">
             ¿No tiene cuenta?
           </a>
           <br />
           <br />
-
+  
           <input className={styles.submitButton} type="submit" value="Enviar" />
         </form>
       </main>

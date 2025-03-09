@@ -8,6 +8,12 @@ export default function SearchResults() {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
   const categoryQuery = searchParams.get("category") || "";
+  const priceMinQuery = searchParams.get("priceMin") || "";
+  const priceMaxQuery = searchParams.get("priceMax") || "";
+
+  // Convertir parámetros de precio a números (o null si no se indican)
+  const priceMin = priceMinQuery ? parseFloat(priceMinQuery) : null;
+  const priceMax = priceMaxQuery ? parseFloat(priceMaxQuery) : null;
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +32,7 @@ export default function SearchResults() {
       });
   }, []);
 
-  // Función para manejar categorías desde la URL (igual que antes)
+  // Función para mapear la categoría de la URL a las categorías reales
   const mapCategory = (cat) => {
     const lowerCat = cat.toLowerCase();
     switch (lowerCat) {
@@ -47,27 +53,28 @@ export default function SearchResults() {
     }
   };
 
-  // Función para filtrar productos
+  // Función para filtrar productos (por búsqueda, categoría y precio)
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
 
     const mappedCategories = mapCategory(categoryQuery);
+    const matchesCategory =
+      !mappedCategories || mappedCategories.length === 0
+        ? true
+        : mappedCategories.includes(product.category);
 
-    if (!mappedCategories || mappedCategories.length === 0) {
-      return matchesSearch;
-    }
+    const matchesPrice =
+      (priceMin === null || product.price >= priceMin) &&
+      (priceMax === null || product.price <= priceMax);
 
-    const matchesCategory = mappedCategories.includes(product.category);
-    return matchesSearch && matchesCategory;
+    return matchesSearch && matchesCategory && matchesPrice;
   });
 
-  // FUNCIÓN: Agregar producto a la wishlist en localStorage
+  // Función: Agregar producto a la wishlist en localStorage
   const handleAddToWishlist = (product) => {
-    // Lee la wishlist actual
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    // Comprueba si ya está en la wishlist para no duplicar
     const exists = wishlist.some((item) => item.id === product.id);
     if (!exists) {
       wishlist.push(product);
@@ -91,7 +98,6 @@ export default function SearchResults() {
             {filteredProducts.map((product) => (
               <article key={product.id} className={styles.product}>
                 <h4>{product.title}</h4>
-
                 <Link href={`/subastas/${product.id}`}>
                   <img
                     src={product.image}
@@ -99,12 +105,10 @@ export default function SearchResults() {
                     className={styles.clickableImg}
                   />
                 </Link>
-
                 <p>{product.description}</p>
                 <p>
                   <strong>Precio mínimo para la puja:</strong> {product.price}€
                 </p>
-
                 <Link href={`/subastas/${product.id}`}>
                   <input
                     type="button"
@@ -112,7 +116,6 @@ export default function SearchResults() {
                     className={styles.detailsButton}
                   />
                 </Link>
-
                 {/* Botón para añadir a la wishlist */}
                 <input
                   type="button"

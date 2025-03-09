@@ -7,10 +7,23 @@ function Navbar() {
   const [searchTerm, setSearchTerm] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
 
-  useEffect(() => {
-    // Comprueba si existe un token en localStorage
+  // Función para actualizar el estado del login
+  const updateLoginStatus = () => {
     const token = localStorage.getItem("token");
     setLoggedIn(!!token);
+  };
+
+  useEffect(() => {
+    // Comprueba si existe un token en localStorage al montar el componente
+    updateLoginStatus();
+
+    // Agrega listener para el evento "logout" (o cualquier otro evento personalizado que uses)
+    window.addEventListener("logout", updateLoginStatus);
+
+    // Limpia el listener al desmontar
+    return () => {
+      window.removeEventListener("logout", updateLoginStatus);
+    };
   }, []);
 
   return (
@@ -62,7 +75,6 @@ function Navbar() {
         <Link href="/wishlist" className={styles.wishlistLink}>
           Wishlist
         </Link>
-
       </div>
     </nav>
   );

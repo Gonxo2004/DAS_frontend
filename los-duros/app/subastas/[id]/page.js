@@ -1,11 +1,10 @@
 "use client"; // Necesario porque usamos useState y useEffect
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation"; // Para recoger el id
 import Link from "next/link"; // Para la navegación
 import Reader from "../../../components/Reader"; // Ajusta la ruta según corresponda
 import styles from "./page.module.css";
-
 
 export default function ProductDetailPage() {
   const { id } = useParams(); // Obtenemos el id desde la URL
@@ -25,11 +24,6 @@ export default function ProductDetailPage() {
       .catch((err) => console.error("Error fetching product:", err));
   }, [id]);
 
-  // Función para cambiar la imagen principal
-  function changeImage(newSrc) {
-    setMainImage(newSrc);
-  }
-
   // Función de puja
   function handleBid(minimumBid) {
     const currentBid = parseFloat(bidValue) || 0;
@@ -38,6 +32,16 @@ export default function ProductDetailPage() {
     } else {
       setBidMessage("¡Puja realizada con éxito!");
     }
+  }
+
+  // Función para añadir a la wishlist
+  function handleAddToWishlist(product) {
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const exists = wishlist.some((item) => item.id === product.id);
+    if (!exists) {
+      wishlist.push(product);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    } 
   }
 
   if (!product) {
@@ -81,6 +85,14 @@ export default function ProductDetailPage() {
               onClick={() => handleBid(product.price)}
             >
               ¡Pujar ahora!
+            </button>
+
+            {/* Botón para añadir a la wishlist */}
+            <button
+              className={styles.wishlistButton}
+              onClick={() => handleAddToWishlist(product)}
+            >
+              Añadir a Wishlist
             </button>
 
             <Link href="/subastas">

@@ -16,7 +16,6 @@ export default function Usuario() {
       return;
     }
 
-    // Actualizamos el endpoint a /api/users/profile/ según lo que indica el error
     fetch("https://das-p2-backend.onrender.com/api/users/profile/", {
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -46,6 +45,15 @@ export default function Usuario() {
       });
   }, [router]);
 
+  const handleLogout = () => {
+    // Elimina el token y cualquier dato relacionado
+    localStorage.removeItem("token");
+    // Emite un evento personalizado para notificar el cambio
+    window.dispatchEvent(new Event("logout"));
+    // Redirige al usuario a la página de login
+    router.push("/login");
+  };
+
   if (!userData) {
     return (
       <Reader>
@@ -60,11 +68,24 @@ export default function Usuario() {
     <Reader>
       <main className={styles.usuario}>
         <h1>Detalles de Usuario</h1>
-        <p><strong>Username:</strong> {userData.username}</p>
-        <p><strong>Email:</strong> {userData.email}</p>
-        <p><strong>Nombre:</strong> {userData.first_name}</p>
-        <p><strong>Apellidos:</strong> {userData.last_name}</p>
-        {/* Agrega más campos si tu backend los provee */}
+        <p>
+          <strong>Username:</strong> {userData.username}
+        </p>
+        <p>
+          <strong>Email:</strong> {userData.email}
+        </p>
+        <p>
+          <strong>Nombre:</strong> {userData.first_name}
+        </p>
+        <p>
+          <strong>Apellidos:</strong> {userData.last_name}
+        </p>
+        <p>
+          <strong>Fecha de nacimiento:</strong> {userData.birth_date}
+        </p>
+        <button onClick={handleLogout} className={styles.logoutButton}>
+          Cerrar sesión
+        </button>
       </main>
     </Reader>
   );

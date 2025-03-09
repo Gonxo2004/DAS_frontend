@@ -1,12 +1,10 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Reader from "../../components/Reader";
 import styles from "./page.module.css";
 
-// Mapeo de comunidades -> ciudades
 const ciudadesPorComunidad = {
   "Andalucía": ["Sevilla", "Málaga", "Córdoba", "Granada", "Cádiz"],
   "Aragón": ["Zaragoza", "Huesca", "Teruel"],
@@ -35,30 +33,28 @@ export default function Registro() {
 
   const [pass1, setPass1] = useState("");
   const [pass2, setPass2] = useState("");
+  
+  // Aquí acumularemos mensajes de error para mostrarlos en el UI (contraseñas o errores del servidor)
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Campos que vamos a mandar al backend
+  // Campos que se mandan al backend
   const [fname, setFname] = useState("");
   const [sname, setSname] = useState("");
   const [fechanac, setFechanac] = useState("");
   const [usuario, setUsuario] = useState("");
   const [email, setEmail] = useState("");
 
-  // Campos que NO se envían al backend pero que mantienes en el formulario
+  // Otros campos del formulario (no se envían)
   const [dni, setDni] = useState("");
   const [direccion, setDireccion] = useState("");
-
-  // Para la ciudad seleccionada
   const [ciudadSeleccionada, setCiudadSeleccionada] = useState("");
 
-  // Actualiza la lista de ciudades al cambiar la comunidad
   useEffect(() => {
     const lista = ciudadesPorComunidad[comunidad] || [];
     setCiudades(lista);
     setCiudadSeleccionada("");
   }, [comunidad]);
 
-  // Comprueba que las contraseñas coincidan
   useEffect(() => {
     if (pass1 && pass2 && pass1 !== pass2) {
       setErrorMsg("Las contraseñas no coinciden");
@@ -70,35 +66,32 @@ export default function Registro() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    // Validamos comunidad y ciudad
+    // Limpiamos errores previos antes de realizar validaciones
+    setErrorMsg("");
+
     if (!comunidad) {
-      alert("Selecciona tu comunidad autónoma");
+      setErrorMsg("Selecciona tu comunidad autónoma");
       return;
     }
     if (!ciudadSeleccionada) {
-      alert("Selecciona tu ciudad");
+      setErrorMsg("Selecciona tu ciudad");
       return;
     }
-
-    // Validamos contraseñas
     if (pass1 !== pass2) {
-      alert("Error: Las contraseñas no coinciden.");
+      setErrorMsg("Error: Las contraseñas no coinciden.");
       return;
     }
 
-    // Construimos el body para el backend
     const body = {
       username: usuario,
       email: email,
       password: pass1,
       first_name: fname,
       last_name: sname,
-      birth_date: fechanac, // YYYY-MM-DD
+      birth_date: fechanac,
       locality: comunidad,
       municipality: ciudadSeleccionada,
     };
-
-    console.log("Enviando body:", body);
 
     try {
       const response = await fetch(
@@ -108,46 +101,38 @@ export default function Registro() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         }
-      );  
-      // Elimina solo items específicos:
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
+      );
 
-      // O bien, limpia todo el localStorage (cuidado, esto borra todo)
+      // Limpiamos el localStorage para borrar datos anteriores
       localStorage.clear();
 
-
       if (!response.ok) {
-        // Leemos el contenido de error
-        const errorText = await response.text();
-        console.error(
-          "Error al registrar:",
-          "Status:",
-          response.status,
-          "Body:",
-          errorText
-        );
-
-        // Posible parse de JSON
+        // Intentamos parsear el JSON de error
         try {
-          const maybeJson = JSON.parse(errorText);
-          console.error("Error parseado como JSON:", maybeJson);
-        } catch (parseError) {
-          console.warn("No se pudo parsear como JSON:", parseError);
-        }
+          const errorData = await response.json();
+          
+          // errorData puede tener múltiples campos: password, username, etc.
+          // Convertimos todo en un único string para mostrarlo
+          const mensajes = Object.values(errorData)
+            .flat()
+            .join(". ");
 
-        alert("No se pudo registrar. Mira la consola para más detalle.");
+          setErrorMsg(mensajes || "No se pudo registrar (Error desconocido).");
+        } catch (jsonErr) {
+          // Si no era JSON, leemos el texto en crudo
+          const errorText = await response.text();
+          setErrorMsg(errorText || "No se pudo registrar (Error desconocido).");
+        }
         return;
       }
 
+      // Si llega aquí, es que todo fue bien
       const newUser = await response.json();
-      console.log("Usuario creado:", newUser);
-
-      // Redirige al login
+      // Redireccionamos al login (ya no mostramos nada por consola)
       router.push("/login");
     } catch (error) {
-      console.error("Error en la petición:", error);
-      alert("Error de conexión con el servidor");
+      // Error de conexión
+      setErrorMsg("Error de conexión con el servidor");
     }
   }
 
@@ -156,13 +141,19 @@ export default function Registro() {
       <main className={styles.mainRegistro}>
         <h1>Formulario de registro</h1>
         <h3>Por favor, rellena los siguientes datos para registrarte</h3>
+
+        {/* Muestra el mensaje de error si existe */}
+        {errorMsg && (
+          <div style={{ color: "red", marginBottom: "1rem" }}>
+            {errorMsg}
+          </div>
+        )}
+
         <fieldset>
           <form onSubmit={handleSubmit}>
-            {/* Nombre */}
+            {/* Campo: Nombre */}
             <div className={styles.formGroup}>
-              <label htmlFor="fname" className={styles.labelText}>
-                Nombre:
-              </label>
+              <label htmlFor="fname" className={styles.labelText}>Nombre:</label>
               <input
                 className={styles.inputField}
                 type="text"
@@ -174,11 +165,9 @@ export default function Registro() {
               />
             </div>
 
-            {/* Apellidos */}
+            {/* Campo: Apellidos */}
             <div className={styles.formGroup}>
-              <label htmlFor="sname" className={styles.labelText}>
-                Apellidos:
-              </label>
+              <label htmlFor="sname" className={styles.labelText}>Apellidos:</label>
               <input
                 className={styles.inputField}
                 type="text"
@@ -190,11 +179,9 @@ export default function Registro() {
               />
             </div>
 
-            {/* DNI (no se envía) */}
+            {/* Campo: DNI */}
             <div className={styles.formGroup}>
-              <label htmlFor="dni" className={styles.labelText}>
-                DNI/NIE:
-              </label>
+              <label htmlFor="dni" className={styles.labelText}>DNI/NIE:</label>
               <input
                 className={styles.inputField}
                 type="text"
@@ -206,11 +193,9 @@ export default function Registro() {
               />
             </div>
 
-            {/* Fecha de nacimiento */}
+            {/* Campo: Fecha de nacimiento */}
             <div className={styles.formGroup}>
-              <label htmlFor="fechanac" className={styles.labelText}>
-                Fecha de nacimiento:
-              </label>
+              <label htmlFor="fechanac" className={styles.labelText}>Fecha de nacimiento:</label>
               <input
                 className={styles.inputField}
                 type="date"
@@ -221,11 +206,9 @@ export default function Registro() {
               />
             </div>
 
-            {/* Usuario */}
+            {/* Campo: Usuario */}
             <div className={styles.formGroup}>
-              <label htmlFor="usuario" className={styles.labelText}>
-                Usuario:
-              </label>
+              <label htmlFor="usuario" className={styles.labelText}>Usuario:</label>
               <input
                 className={styles.inputField}
                 type="text"
@@ -237,11 +220,9 @@ export default function Registro() {
               />
             </div>
 
-            {/* Email */}
+            {/* Campo: Email */}
             <div className={styles.formGroup}>
-              <label htmlFor="email" className={styles.labelText}>
-                Correo electrónico:
-              </label>
+              <label htmlFor="email" className={styles.labelText}>Correo electrónico:</label>
               <input
                 className={styles.inputField}
                 type="email"
@@ -253,11 +234,9 @@ export default function Registro() {
               />
             </div>
 
-            {/* Dirección (no se envía) */}
+            {/* Campo: Dirección */}
             <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-              <label htmlFor="direccion" className={styles.labelText}>
-                Dirección:
-              </label>
+              <label htmlFor="direccion" className={styles.labelText}>Dirección:</label>
               <input
                 className={styles.inputField}
                 type="text"
@@ -269,11 +248,9 @@ export default function Registro() {
               />
             </div>
 
-            {/* Comunidad */}
+            {/* Campo: Comunidad */}
             <div className={styles.formGroup}>
-              <label htmlFor="comunidad" className={styles.labelText}>
-                Comunidad Autónoma:
-              </label>
+              <label htmlFor="comunidad" className={styles.labelText}>Comunidad Autónoma:</label>
               <select
                 className={styles.inputField}
                 id="comunidad"
@@ -283,18 +260,14 @@ export default function Registro() {
               >
                 <option value="">-- Selecciona tu comunidad --</option>
                 {Object.keys(ciudadesPorComunidad).map((com) => (
-                  <option key={com} value={com}>
-                    {com}
-                  </option>
+                  <option key={com} value={com}>{com}</option>
                 ))}
               </select>
             </div>
 
-            {/* Ciudad */}
+            {/* Campo: Ciudad */}
             <div className={styles.formGroup}>
-              <label htmlFor="ciudad" className={styles.labelText}>
-                Ciudad:
-              </label>
+              <label htmlFor="ciudad" className={styles.labelText}>Ciudad:</label>
               <select
                 className={styles.inputField}
                 id="ciudad"
@@ -305,18 +278,14 @@ export default function Registro() {
               >
                 <option value="">-- Selecciona tu ciudad --</option>
                 {ciudades.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
+                  <option key={c} value={c}>{c}</option>
                 ))}
               </select>
             </div>
 
-            {/* Contraseña */}
+            {/* Campo: Contraseña */}
             <div className={styles.formGroup}>
-              <label htmlFor="contraseña" className={styles.labelText}>
-                Contraseña:
-              </label>
+              <label htmlFor="contraseña" className={styles.labelText}>Contraseña:</label>
               <input
                 className={styles.inputField}
                 type="password"
@@ -328,11 +297,9 @@ export default function Registro() {
               />
             </div>
 
-            {/* Confirmación de contraseña */}
+            {/* Campo: Confirmación de Contraseña */}
             <div className={styles.formGroup}>
-              <label htmlFor="contraseña2" className={styles.labelText}>
-                Confirmación contraseña:
-              </label>
+              <label htmlFor="contraseña2" className={styles.labelText}>Confirmación contraseña:</label>
               <input
                 className={styles.inputField}
                 type="password"
@@ -342,14 +309,17 @@ export default function Registro() {
                 value={pass2}
                 onChange={(e) => setPass2(e.target.value)}
               />
-              <p id="error_msg" style={{ color: "red" }}>{errorMsg}</p>
+              {/* Error (contraseña) */}
+              {errorMsg && (
+                <p id="error_msg" style={{ color: "red", marginTop: "0.5rem" }}>
+                  {errorMsg}
+                </p>
+              )}
             </div>
 
-            {/* Imagen (no se envía) */}
+            {/* Campo: Imagen (no se envía) */}
             <div className={styles.formGroup}>
-              <label htmlFor="myfile" className={styles.labelText}>
-                Imagen:
-              </label>
+              <label htmlFor="myfile" className={styles.labelText}>Imagen:</label>
               <input
                 className={styles.inputField}
                 type="file"
@@ -361,12 +331,7 @@ export default function Registro() {
             {/* Acciones del formulario */}
             <div className={styles.formActions}>
               <Link href="/login">
-                <img
-                  src="/imgs/flecha.png"
-                  alt="flecha"
-                  width="30"
-                  height="30"
-                />
+                <img src="/imgs/flecha.png" alt="flecha" width="30" height="30" />
               </Link>
               <input className={styles.submitButton} type="submit" value="Enviar" />
               <input className={styles.submitButton} type="reset" value="Reset" />
