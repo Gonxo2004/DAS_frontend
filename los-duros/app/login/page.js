@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Reader from "../../components/Reader";
@@ -14,8 +13,10 @@ export default function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+  
     try {
+      console.log("Enviando petición a la API...");
+  
       const response = await fetch(
         "https://das-p2-backend.onrender.com/api/users/login/",
         {
@@ -27,28 +28,37 @@ export default function Login() {
           }),
         }
       );
-
+  
+      console.log("Respuesta recibida, status:", response.status);
+  
       if (!response.ok) {
-        // Credenciales inválidas u otro error
         const errorData = await response.json();
+        console.error("Error en login:", errorData);
         setErrorMsg(errorData.detail || "Error en login");
         return;
       }
-
+  
       const data = await response.json();
-      // data = { access: "...", username: "..." } (depende de tu backend)
-
+      console.log("Datos de login recibidos:", data);
+  
       // Guardamos el token en localStorage
       localStorage.setItem("token", data.access);
       localStorage.setItem("username", data.username);
-
-      // Redirige a la página principal (o donde prefieras)
+  
+      console.log("Token guardado en localStorage");
+  
+      // Redirigir a la página principal
       router.push("/");
+      // Forzar recarga para que el Navbar se remonte y lea el token
+      window.location.reload();
+  
     } catch (error) {
       console.error("Error en la petición:", error);
       setErrorMsg("Error de conexión con el servidor");
     }
   }
+  
+  
 
   return (
     <Reader>
