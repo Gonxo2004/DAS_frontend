@@ -90,5 +90,19 @@
   background-color: #000000;
 }
 
+/* Estilo específico para el enlace de Wishlist */
+.wishlistLink {
+  color: #ffffff;            /* Texto blanco */
+  padding: 8px 16px;         /* Para que parezca botón */
+  border-radius: 4px;
+  text-decoration: none;     /* Sin subrayado */
+  margin-right: 1rem;        /* Espacio a la derecha */
+  transition: background-color 0.3s ease;
+}
+
+.wishlistLink:hover {
+  background-color: #000000; /* Cambia a negro al pasar el ratón */
+  color: #ffffff;            /* Mantén texto blanco */
+}
 
 

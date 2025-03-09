@@ -9,6 +9,10 @@
   min-width: 320px;
   margin: 0 auto;
   text-align: center;
+  color: #000;
+}
+.mainRegistro h3 {
+  color: #000;
 }
 
 /* Cada bloque (Nombre, Apellidos, etc.) */

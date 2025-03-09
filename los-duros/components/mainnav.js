@@ -1,12 +1,17 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "./mainnav.module.css"; // Tus estilos
 
 function Navbar() {
-  // Estado para el input, si quieres controlarlo
   const [searchTerm, setSearchTerm] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Comprueba si existe un token en localStorage
+    const token = localStorage.getItem("token");
+    setLoggedIn(!!token);
+  }, []);
 
   return (
     <nav className={styles.navbar}>
@@ -21,8 +26,18 @@ function Navbar() {
           />
         </Link>
         <Link href="/subastas">Productos destacados</Link>
-        <Link href="/registro">Registro</Link>
-        <Link href="/login">Login</Link>
+        {/* Si el usuario no está logueado, mostramos Registro y Login */}
+        {!loggedIn && (
+          <>
+            <Link href="/registro">Registro</Link>
+            <Link href="/login">Login</Link>
+          </>
+        )}
+        {loggedIn && (
+          <Link href="/usuario" className={styles.accountLink}>
+            Mi cuenta
+          </Link>
+        )}
       </div>
 
       <div className={styles.center}>
@@ -30,7 +45,7 @@ function Navbar() {
         <form action="/subastas" method="get">
           <input
             type="text"
-            name="search"       
+            name="search"
             placeholder="Buscar..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -43,15 +58,11 @@ function Navbar() {
       </div>
 
       <div className={styles.right}>
-        <Link href="/usuario">
-        <img
-            className={styles.user}
-            alt="User"
-            src="/imgs/user.png"
-            width={50}
-            height={50}
-          />
+        {/* Enlace a la Wishlist */}
+        <Link href="/wishlist" className={styles.wishlistLink}>
+          Wishlist
         </Link>
+
       </div>
     </nav>
   );
