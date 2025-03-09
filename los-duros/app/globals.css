@@ -2,15 +2,21 @@
    1. Variables y modo oscuro
    ========================= */
    :root {
-    --background: #474747; /* Fondo por defecto */
-    --foreground: #000000; /* Texto por defecto */
+    --background: #f5f5f5;      /* Fondo claro por defecto */
+    --foreground: #000000;      /* Texto por defecto */
+    --primary-color: #FF6600;   /* Color principal (puedes cambiarlo) */
+    --secondary-color: #0055FF; /* Color secundario (opcional) */
+    --accent-color: #ffedc5;    /* Color de acento (hover, etc.) */
     
+    /* Tipografía base (puedes cambiar la fuente según tu preferencia) */
+    --font-family-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-family-serif: Georgia, 'Times New Roman', serif;
   }
   
   @media (prefers-color-scheme: dark) {
     :root {
       --background: #1f1f1f; 
-      --foreground: #101010db;
+      --foreground: #f8f8f8;
     }
   }
   
@@ -23,7 +29,7 @@
     box-sizing: border-box;
   }
   
-  /* Control del modo oscuro nativo */
+  /* Modo oscuro nativo */
   @media (prefers-color-scheme: dark) {
     html {
       color-scheme: dark;
@@ -31,83 +37,95 @@
   }
   
   /* =========================
-     3. Estructura base
+     3. Base de html y body
      ========================= */
-  html,
-  body {
+  html, body {
+    margin: 0;
+    padding: 0;
     height: 100%;
-    max-width: 100vw; /* Evita scroll horizontal */
-    overflow-x: hidden;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-family-sans);
+    line-height: 1.5;
+  }
+  
+  /* Crea un contenedor "flex" vertical para toda la página */
+  body {
     display: flex;
     flex-direction: column;
-    font-family: Arial, Helvetica, sans-serif;
-    background: var(--background);
-    color: var(--foreground);
+    min-height: 80vh;
   }
   
   /* =========================
-     4. Elementos y etiquetas
+     4. Contenedores principales
      ========================= */
+  /* .page-container agrupa la nav y el main */
+  .page-container {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* .main-content crece con el espacio sobrante */
+  .main-content {
+    flex: 1;
+    /* Opcional: agrega algo de padding o un wrapper para centrar y limitar ancho */
+    padding: 4rem 2rem;
+  }
+  
+  /* =========================
+     5. Tipografías y textos 
+     ========================= */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 200;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Un poco de margen para párrafos */
+  p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  
+  /* Links globales (fuera de la navbar) */
   a {
-    color: inherit;
+    color: var(--primary-color);
     text-decoration: none;
-    color: #000000;
+    transition: color 0.2s ease;
   }
   
-  a img {
-    margin-top: 0;
-    transition: transform 0.2s ease-in-out;
-    width: 80px;
-    height: 50px;
-    text-align: left;
-    color: #000;
+  a:hover {
+    color: var(--secondary-color);
   }
   
   /* =========================
-     5. Main
-     ========================= */
-  main {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  /* =========================
-     6. Header
-     ========================= */
-  header {
-    background-color: #000;
-    text-align: center;
-    padding: 20px 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #dee2e6;
-  }
-  
-  header h1 {
-    color: #fff;
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-  }
-  
-  header h3 {
-    color: #9ca4ab;
-    font-size: 1rem;
-    margin: 0;
-  }
-  
-  /* =========================
-     7. Footer
+     6. Footer
      ========================= */
   footer {
+    background-color: #000; /* Puedes cambiar a var(--primary-color) si quieres */
+    color: #fff; 
+    padding: 16px;
     text-align: center;
-    color: #ffebc1;
-    background-color: #000;
+    /* Opcional: estilo más discreto */
     font-size: 0.9rem;
-    padding: 10px;
-    border-top: 1px solid #dee2e6;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-
   }
+  
+  /* =========================
+     7. Botones globales (ejemplo)
+     ========================= */
+  button {
+    cursor: pointer;
+    background-color: var(--primary-color);
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: var(--secondary-color);
+  }
+
   

@@ -1,16 +1,18 @@
-"use client"; // Necesario en App Router si usas useState y useEffect
-
+"use client";
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import Reader from "../../components/Reader"; // Ajusta la ruta de Reader según corresponda
-import styles from "./page.module.css"; // Ajusta el path a tu CSS
+import styles from "./page.module.css";
+import Reader from "../../components/Reader";
 
 export default function SearchResults() {
+  // Lee el valor de 'search' de la URL (e.g. ?search=zapatos)
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState(""); // Estado para la búsqueda
 
-  // Llamada a la API cuando se monta el componente
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
@@ -24,7 +26,7 @@ export default function SearchResults() {
       });
   }, []);
 
-  // Filtra los productos según el texto de búsqueda
+  // Filtra los productos con el texto de búsqueda
   const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -32,7 +34,10 @@ export default function SearchResults() {
   return (
     <Reader>
       <div>
-          <main>
+        <header>
+          <h1>PRODUCTOS DESTACADOS</h1>
+        </header>
+        <main>
           {loading ? (
             <p>Cargando productos...</p>
           ) : (
@@ -41,7 +46,6 @@ export default function SearchResults() {
                 <article key={product.id} className={styles.product}>
                   <h4>{product.title}</h4>
 
-                  {/* Link para ir a /subastas/[id] */}
                   <Link href={`/subastas/${product.id}`}>
                     <img
                       src={product.image}
@@ -55,7 +59,6 @@ export default function SearchResults() {
                     <strong>Precio mínimo para la puja:</strong> {product.price}€
                   </p>
 
-                  {/* Botón "See Details" con <input type="button"> */}
                   <Link href={`/subastas/${product.id}`}>
                     <input
                       type="button"
@@ -67,17 +70,15 @@ export default function SearchResults() {
                   <input
                     type="button"
                     value="Add to Wishlist"
-                    onClick={() => console.log("Added to wishlist:", product.id)}
+                    onClick={() =>
+                      console.log("Added to wishlist:", product.id)
+                    }
                   />
                 </article>
               ))}
             </section>
           )}
         </main>
-
-        <footer>
-          Creado por <b>Gonzalo Borrachero y Luis García</b> - <i>2025</i>
-        </footer>
       </div>
     </Reader>
   );
