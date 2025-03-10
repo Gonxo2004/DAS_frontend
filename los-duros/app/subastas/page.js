@@ -105,7 +105,7 @@ export default function SearchResults() {
                     className={styles.clickableImg}
                   />
                 </Link>
-                <p>{product.description}</p>
+                {/*<p>{product.description}</p>*/}
                 <p>
                   <strong>Precio mínimo para la puja:</strong> {product.price}€
                 </p>
