@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import styles from "./page.module.css"; // Archivo CSS que se incluye a continuación
+import styles from "./page.module.css";
 
 export default function BidsSection({ auctionId, auctionFechaLimite }) {
   const [bids, setBids] = useState([]);
@@ -8,7 +8,7 @@ export default function BidsSection({ auctionId, auctionFechaLimite }) {
   const [message, setMessage] = useState("");
   const [editingBidId, setEditingBidId] = useState(null);
   const [editingBidPrice, setEditingBidPrice] = useState("");
-  
+
   // Se asume que el token y el username se almacenan en localStorage
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username") || "Usuario";
@@ -41,7 +41,7 @@ export default function BidsSection({ auctionId, auctionFechaLimite }) {
 
   // Obtenemos la puja más alta (si hay)
   const highestBid = bids.length > 0 ? bids[0].precio : 0;
-  // Determinamos si la subasta está abierta
+  // Determinamos si la subasta está abierta (la fecha límite es posterior a la fecha actual)
   const isAuctionOpen = new Date(auctionFechaLimite) > new Date();
 
   // Manejo del envío de una nueva puja
@@ -168,10 +168,9 @@ export default function BidsSection({ auctionId, auctionFechaLimite }) {
           {bids.map((bid) => (
             <li key={bid.id} className={styles.bidItem}>
               <p>
-                <strong>{bid.pujador}</strong> pujó <strong>{bid.precio}€</strong>{" "}
-                el {new Date(bid.fechaCreacion).toLocaleString()}
+                <strong>{bid.pujador}</strong> pujó <strong>{bid.precio}€</strong> el{" "}
+                {new Date(bid.fechaCreacion).toLocaleString()}
               </p>
-              {/* Si el usuario está logueado y la subasta está abierta, se pueden editar/borrar pujas */}
               {token && isAuctionOpen && (
                 <div className={styles.bidActions}>
                   {editingBidId === bid.id ? (
@@ -211,7 +210,6 @@ export default function BidsSection({ auctionId, auctionFechaLimite }) {
           ))}
         </ul>
       )}
-      {/* Formulario para nueva puja: solo si el usuario está logueado y la subasta está abierta */}
       {token && isAuctionOpen && (
         <form onSubmit={handleBidSubmit} className={styles.newBidForm}>
           <input

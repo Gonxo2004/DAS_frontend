@@ -1,234 +1,125 @@
-"use client";
+"use client"; // Necesario porque usamos useState y useEffect
+
 import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation"; // Para recoger el id
+import Link from "next/link"; // Para la navegación
+import Reader from "../../../components/Reader"; // Ajusta la ruta según corresponda
 import styles from "./page.module.css";
 
-export default function SubastaDetailPage() {
-  const { id } = useParams(); // Si existe, estamos en modo edición
-  const router = useRouter();
-  const isEditing = Boolean(id);
+export default function ProductDetailPage() {
+  const { id } = useParams(); // Obtenemos el id desde la URL
+  const [product, setProduct] = useState(null);
+  const [bidValue, setBidValue] = useState("");
+  const [bidMessage, setBidMessage] = useState("");
 
-  const [formData, setFormData] = useState({
-    titulo: "",
-    descripcion: "",
-    fechaLimite: "",
-    // Fecha actual en formato YYYY-MM-DD
-    fechaCreacion: new Date().toISOString().split("T")[0],
-    imagen: "",
-    precioSalida: "",
-    stock: "",
-    valoracion: "",
-    categoria: "",
-    marca: "",
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
-  // Si estamos editando, cargar los datos de la subasta desde el backend
-  useEffect(() => {
-    if (isEditing) {
-      setLoading(true);
-      fetch(`https://mi-backend.com/api/subastas/${id}/`) // Reemplaza con tu endpoint real
-        .then((res) => {
-          if (!res.ok) throw new Error("Error al obtener la subasta");
-          return res.json();
-        })
-        .then((data) => {
-          setFormData({
-            titulo: data.titulo || "",
-            descripcion: data.descripcion || "",
-            fechaLimite: data.fechaLimite || "",
-            fechaCreacion: data.fechaCreacion || new Date().toISOString().split("T")[0],
-            imagen: data.imagen || "",
-            precioSalida: data.precioSalida || "",
-            stock: data.stock || "",
-            valoracion: data.valoracion || "",
-            categoria: data.categoria || "",
-            marca: data.marca || "",
-          });
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error(error);
-          setMessage("Error al cargar los detalles de la subasta.");
-          setLoading(false);
-        });
-    }
-  }, [id, isEditing]);
-
-  // Manejo de cambios en el formulario (incluyendo el input file)
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files && files[0]) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev) => ({ ...prev, [name]: reader.result }));
-      };
-      reader.onerror = (err) => {
-        console.error("Error loading file:", err);
-        setMessage("Error al cargar el archivo. Por favor, intenta de nuevo.");
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+  // Función para convertir una fecha a formato YYYY-MM-DD
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    if (isNaN(date)) return "";
+    return date.toISOString().split("T")[0];
   };
 
-  // Manejo del envío del formulario: PUT si es edición, POST si es creación
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const method = isEditing ? "PUT" : "POST";
-    const url = isEditing
-      ? `https://mi-backend.com/api/subastas/${id}/`
-      : "https://mi-backend.com/api/subastas/";
-    fetch(url, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        // Agrega aquí autenticación si es necesario, por ejemplo:
-        // "Authorization": `Bearer ${localStorage.getItem("token")}`
-      },
-      body: JSON.stringify(formData),
-    })
+  useEffect(() => {
+    if (!id) return; // Evita llamadas si `id` aún no está
+    console.log("Cargando producto con id:", id);
+    fetch(`https://fakestoreapi.com/products/${id}`)
       .then((res) => {
-        if (!res.ok) throw new Error("Error en la operación");
+        if (!res.ok) {
+          console.error("Error en la respuesta del API:", res.status);
+          throw new Error("Error al obtener el producto");
+        }
         return res.json();
       })
       .then((data) => {
-        setMessage(isEditing ? "Subasta actualizada exitosamente" : "Subasta creada exitosamente");
-        router.push(`/subastas/${data.id}`);
+        console.log("Datos recibidos:", data);
+        // Aseguramos que las fechas tengan el formato correcto
+        data.fechaCreacion = formatDate(data.fechaCreacion);
+        data.fechaLimite = formatDate(data.fechaLimite);
+        setProduct(data);
       })
-      .catch((error) => {
-        console.error(error);
-        setMessage("Ocurrió un error al enviar los datos.");
-      });
-  };
+      .catch((err) => console.error("Error fetching product:", err));
+  }, [id]);
 
-  if (loading) {
-    return <p className={styles.loading}>Cargando datos...</p>;
+  // Función de puja
+  function handleBid(minimumBid) {
+    const currentBid = parseFloat(bidValue) || 0;
+    if (currentBid < minimumBid) {
+      setBidMessage(`La puja debe ser mayor a ${minimumBid}€`);
+    } else {
+      setBidMessage("¡Puja realizada con éxito!");
+    }
+  }
+
+  // Función para añadir a la wishlist
+  function handleAddToWishlist(product) {
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const exists = wishlist.some((item) => item.id === product.id);
+    if (!exists) {
+      wishlist.push(product);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    }
+  }
+
+  if (!product) {
+    return <p className={styles.loading}>Cargando producto...</p>;
   }
 
   return (
-    <div className={styles.detailContainer}>
-      <h2>{isEditing ? "Editar Subasta" : "Crear Subasta"}</h2>
-      {message && <p className={styles.message}>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Título:</label>
-          <input
-            type="text"
-            name="titulo"
-            className={styles.inputField}
-            placeholder="Ingresa el título"
-            value={formData.titulo}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Descripción:</label>
-          <textarea
-            name="descripcion"
-            className={styles.inputField}
-            placeholder="Ingresa la descripción"
-            value={formData.descripcion}
-            onChange={handleChange}
-            required
-          ></textarea>
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Fecha límite para cierre:</label>
-          <input
-            type="date"
-            name="fechaLimite"
-            className={styles.inputField}
-            value={formData.fechaLimite}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Fecha de creación:</label>
-          <input
-            type="date"
-            name="fechaCreacion"
-            className={styles.inputField}
-            value={formData.fechaCreacion}
-            readOnly
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Imagen:</label>
-          <input
-            type="file"
-            name="imagen"
-            className={styles.inputField}
-            onChange={handleChange}
-            accept="image/*"
-            required={!isEditing}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Precio de salida:</label>
-          <input
-            type="number"
-            name="precioSalida"
-            className={styles.inputField}
-            value={formData.precioSalida}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Stock:</label>
-          <input
-            type="number"
-            name="stock"
-            className={styles.inputField}
-            value={formData.stock}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Valoración:</label>
-          <input
-            type="number"
-            name="valoracion"
-            className={styles.inputField}
-            value={formData.valoracion}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Categoría:</label>
-          <input
-            type="text"
-            name="categoria"
-            className={styles.inputField}
-            value={formData.categoria}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Marca:</label>
-          <input
-            type="text"
-            name="marca"
-            className={styles.inputField}
-            value={formData.marca}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit" className={styles.submitButton}>
-          {isEditing ? "Actualizar Subasta" : "Crear Subasta"}
-        </button>
-      </form>
-    </div>
+    <Reader>
+      <div className={styles.detailContainer}>
+        <main className={styles.mainContent}>
+          {/* Sección de imágenes */}
+          <div className={styles.imagesSection}>
+            <img
+              src={product.image}
+              alt={product.title}
+              className={styles.mainImage}
+            />
+          </div>
+
+          {/* Sección de información */}
+          <div className={styles.infoSection}>
+            <h2>{product.title}</h2>
+            <p className={styles.description}>{product.description}</p>
+            <p className={styles.price}>
+              <strong>Precio mínimo para la puja:</strong> {product.price}€
+            </p>
+
+            <input
+              type="number"
+              placeholder="Introduce tu puja"
+              min={product.price}
+              step="0.01"
+              value={bidValue}
+              onChange={(e) => setBidValue(e.target.value)}
+              className={styles.inputBid}
+            />
+            <p className={styles.bidMessage}>{bidMessage}</p>
+
+            <button
+              className={styles.bidButton}
+              onClick={() => handleBid(product.price)}
+            >
+              ¡Pujar ahora!
+            </button>
+
+            {/* Botón para añadir a la wishlist */}
+            <button
+              className={styles.wishlistButton}
+              onClick={() => handleAddToWishlist(product)}
+            >
+              Añadir a Wishlist
+            </button>
+
+            <Link href="/subastas">
+              <button className={styles.backButton}>
+                ← Volver a subastas
+              </button>
+            </Link>
+          </div>
+        </main>
+      </div>
+    </Reader>
   );
 }
