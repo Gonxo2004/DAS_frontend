@@ -17,7 +17,7 @@ function Navbar() {
     // Comprueba si existe un token en localStorage al montar el componente
     updateLoginStatus();
 
-    // Agrega listener para el evento "logout" (o cualquier otro evento personalizado que uses)
+    // Agrega listener para el evento "logout"
     window.addEventListener("logout", updateLoginStatus);
 
     // Limpia el listener al desmontar
@@ -46,10 +46,16 @@ function Navbar() {
             <Link href="/login">Login</Link>
           </>
         )}
+        {/* Si el usuario está logueado, mostramos Mi cuenta, Crear Subasta y Mis Subastas */}
         {loggedIn && (
-          <Link href="/usuario" className={styles.accountLink}>
-            Mi cuenta
-          </Link>
+          <>
+            <Link href="/usuario" className={styles.accountLink}>
+              Mi cuenta
+            </Link>
+            <Link href="/subastas/crear" className={styles.createAuctionLink}>
+              Crear Subasta
+            </Link>
+          </>
         )}
       </div>
 
@@ -71,7 +77,12 @@ function Navbar() {
       </div>
 
       <div className={styles.right}>
-        {/* Enlace a la Wishlist */}
+      <Link href="/subastas/misPujas" className={styles.myAuctionsLink}>
+          Mis Pujas
+        </Link>
+        <Link href="/subastas/misSubastas" className={styles.myAuctionsLink}>
+          Mis Subastas
+        </Link>
         <Link href="/wishlist" className={styles.wishlistLink}>
           Wishlist
         </Link>

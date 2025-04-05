@@ -1,0 +1,76 @@
+/* Sección de pujas */
+.bidsSection {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    margin-top: 20px;
+    color: #000;
+  }
+  
+  /* Título de la sección */
+  .bidsSection h3 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Mensajes de error/éxito */
+  .message {
+    text-align: center;
+    color: red;
+    margin-bottom: 10px;
+  }
+  
+  /* Lista de pujas */
+  .bidList {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Ítem individual de puja */
+  .bidItem {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1rem;
+    background-color: #f9f9f9;
+  }
+  
+  /* Acciones (editar, borrar) de la puja */
+  .bidActions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  /* Formulario para nueva puja */
+  .newBidForm {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  /* Estilos para inputs */
+  .inputField {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Botones (editar, borrar, pujar) */
+  .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ff6600;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #000;
+  }
+  

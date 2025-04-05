@@ -18,18 +18,35 @@ export default function SearchResults() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Carga los productos de la FakeStoreAPI al montar el componente
+  // Carga los productos de la API y las subastas creadas en localStorage
   useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data);
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("https://fakestoreapi.com/products");
+        const apiProducts = await res.json();
+
+        // Cargar subastas creadas en localStorage
+        const storedSubastas = JSON.parse(localStorage.getItem("subastas")) || [];
+        const transformedSubastas = storedSubastas.map((auction) => ({
+          id: auction.id,
+          title: auction.titulo,
+          description: auction.descripcion,
+          // Aquí, la imagen ya es un string (data URL)
+          image: auction.imagen,
+          price: auction.precioSalida,
+          category: auction.categoria,
+        }));
+
+        // Combinar ambas fuentes
+        setProducts([...transformedSubastas, ...apiProducts]);
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching products:", error);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   // Función para mapear la categoría de la URL a las categorías reales
@@ -53,26 +70,23 @@ export default function SearchResults() {
     }
   };
 
-  // Función para filtrar productos (por búsqueda, categoría y precio)
+  // Filtrar productos (por búsqueda, categoría y precio)
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
-
     const mappedCategories = mapCategory(categoryQuery);
     const matchesCategory =
       !mappedCategories || mappedCategories.length === 0
         ? true
         : mappedCategories.includes(product.category);
-
     const matchesPrice =
       (priceMin === null || product.price >= priceMin) &&
       (priceMax === null || product.price <= priceMax);
-
     return matchesSearch && matchesCategory && matchesPrice;
   });
 
-  // Función: Agregar producto a la wishlist en localStorage
+  // Función para agregar producto a la wishlist en localStorage
   const handleAddToWishlist = (product) => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     const exists = wishlist.some((item) => item.id === product.id);

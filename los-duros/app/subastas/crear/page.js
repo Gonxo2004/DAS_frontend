@@ -1,13 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 
-export default function SubastaDetailPage() {
-  const { id } = useParams(); // Si existe, estamos en modo edición
+export default function CrearSubasta() {
   const router = useRouter();
-  const isEditing = Boolean(id);
-
   const [formData, setFormData] = useState({
     titulo: "",
     descripcion: "",
@@ -22,53 +19,23 @@ export default function SubastaDetailPage() {
     marca: "",
   });
 
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
-  // Si estamos editando, cargar los datos de la subasta desde el backend
+  // Verifica que el usuario esté autenticado
   useEffect(() => {
-    if (isEditing) {
-      setLoading(true);
-      fetch(`https://mi-backend.com/api/subastas/${id}/`) // Reemplaza con tu endpoint real
-        .then((res) => {
-          if (!res.ok) throw new Error("Error al obtener la subasta");
-          return res.json();
-        })
-        .then((data) => {
-          setFormData({
-            titulo: data.titulo || "",
-            descripcion: data.descripcion || "",
-            fechaLimite: data.fechaLimite || "",
-            fechaCreacion: data.fechaCreacion || new Date().toISOString().split("T")[0],
-            imagen: data.imagen || "",
-            precioSalida: data.precioSalida || "",
-            stock: data.stock || "",
-            valoracion: data.valoracion || "",
-            categoria: data.categoria || "",
-            marca: data.marca || "",
-          });
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error(error);
-          setMessage("Error al cargar los detalles de la subasta.");
-          setLoading(false);
-        });
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
     }
-  }, [id, isEditing]);
+  }, [router]);
 
-  // Manejo de cambios en el formulario (incluyendo el input file)
+  // Manejo de cambios en los inputs
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (files && files[0]) {
+      // Convertir el archivo a data URL usando FileReader
       const file = files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((prev) => ({ ...prev, [name]: reader.result }));
-      };
-      reader.onerror = (err) => {
-        console.error("Error loading file:", err);
-        setMessage("Error al cargar el archivo. Por favor, intenta de nuevo.");
       };
       reader.readAsDataURL(file);
     } else {
@@ -76,44 +43,33 @@ export default function SubastaDetailPage() {
     }
   };
 
-  // Manejo del envío del formulario: PUT si es edición, POST si es creación
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const method = isEditing ? "PUT" : "POST";
-    const url = isEditing
-      ? `https://mi-backend.com/api/subastas/${id}/`
-      : "https://mi-backend.com/api/subastas/";
-    fetch(url, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        // Agrega aquí autenticación si es necesario, por ejemplo:
-        // "Authorization": `Bearer ${localStorage.getItem("token")}`
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error en la operación");
-        return res.json();
-      })
-      .then((data) => {
-        setMessage(isEditing ? "Subasta actualizada exitosamente" : "Subasta creada exitosamente");
-        router.push(`/subastas/${data.id}`);
-      })
-      .catch((error) => {
-        console.error(error);
-        setMessage("Ocurrió un error al enviar los datos.");
-      });
+  // Genera un identificador único (ejemplo; en producción lo haría el backend)
+  const generateUniqueId = () => {
+    return Date.now().toString() + Math.floor(Math.random() * 1000).toString();
   };
 
-  if (loading) {
-    return <p className={styles.loading}>Cargando datos...</p>;
-  }
+  // Manejo del envío del formulario
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const nuevaSubasta = {
+      ...formData,
+      id: generateUniqueId(),
+      estado: "abierta",
+    };
+
+    // Guarda la nueva subasta en localStorage
+    const storedSubastas = JSON.parse(localStorage.getItem("subastas")) || [];
+    storedSubastas.push(nuevaSubasta);
+    localStorage.setItem("subastas", JSON.stringify(storedSubastas));
+
+    // Redirige a la página principal de subastas
+    router.push("/subastas");
+  };
 
   return (
-    <div className={styles.detailContainer}>
-      <h2>{isEditing ? "Editar Subasta" : "Crear Subasta"}</h2>
-      {message && <p className={styles.message}>{message}</p>}
+    <div className={styles.mainCrearSubasta}>
+      <h2>Crear Nueva Subasta</h2>
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label className={styles.labelText}>Título:</label>
@@ -167,7 +123,7 @@ export default function SubastaDetailPage() {
             className={styles.inputField}
             onChange={handleChange}
             accept="image/*"
-            required={!isEditing}
+            required
           />
         </div>
         <div className={styles.formGroup}>
@@ -226,7 +182,7 @@ export default function SubastaDetailPage() {
           />
         </div>
         <button type="submit" className={styles.submitButton}>
-          {isEditing ? "Actualizar Subasta" : "Crear Subasta"}
+          Crear Subasta
         </button>
       </form>
     </div>
