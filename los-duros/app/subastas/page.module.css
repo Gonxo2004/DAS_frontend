@@ -1,58 +1,137 @@
+/* Contenedor principal: asegura margen superior para que no se solape con el navbar global */
+.container {
+  margin-top: 80px; /* Ajusta este valor según la altura de tu navbar global */
+}
 
-  /* =========================
-     2. Sección de resultados
-     ========================= */
-  .searchResults {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-  }
-  
-  .product {
-    background-color: #ffffff;
-    color: #000;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 1rem;
-    width: 250px;
-    text-align: center;
-  }
-  
-  /* Para la imagen del producto, el elemento img se marca como global */
-  .product :global(img) {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-  }
-  
-  .product h4 {
-    margin-bottom: 8px;
-  }
-  
-  .product p {
-    font-size: 0.9rem;
-    margin-bottom: 10px;
-  }
-  
-  /* Los botones se definen envolviendo el selector input en :global() */
-  .product :global(input[type="button"]) {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 4px;
-    background-color: #ff6600;
-    color: white;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  
-  .product :global(input[type="button"]):hover {
-    background-color: #000000;
-    color: #ffffff;
-  }
-  
-  header.h1{
-    text-align: center;
-    text-shadow: #000000;
-  }
+/* Encabezado del filtro: incluye el título y el botón de filtros */
+.filtersHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: #fafafa;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Botón de hamburguesa */
+.hamburgerButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+}
+.hamburger {
+  width: 25px;
+  height: 3px;
+  background-color: #ff6600;
+}
+
+/* Dropdown de filtros: se muestra debajo del encabezado */
+.filtersDropdown {
+  padding: 16px 24px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Formulario de filtros */
+.filterForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.filterInput,
+.filterSelect {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Contenedor para sliders */
+.sliderContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.filterSlider {
+  width: 100%;
+}
+
+/* Botones en el formulario de filtros */
+.buttonsContainer {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.resetButton {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ff6600;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Área principal de resultados */
+.mainResults {
+  padding: 16px 24px;
+}
+
+/* Grilla de resultados */
+.searchResults {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* Cada producto */
+.product {
+  padding: 10px;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+  text-align: center;
+}
+.clickableImg {
+  max-width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+
+/* Contenedor para los botones de cada producto */
+.productButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* Botón para ver detalles */
+.detailsButton {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ff6600;
+  color: #fff;
+  cursor: pointer;
+}
+.detailsButton:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Botón para añadir a la wishlist */
+.wishlistButton {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ff6600;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 0; /* Ahora no se añade margen adicional, ya que el contenedor gestiona el espacio */
+}
+.wishlistButton:hover {
+  background-color: #000;
+  color: #fff;
+}

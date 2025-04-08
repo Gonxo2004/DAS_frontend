@@ -1,43 +1,48 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
 
 export default function SearchResults() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const searchQuery = searchParams.get("search") || "";
-  const categoryQuery = searchParams.get("category") || "";
-  const priceMinQuery = searchParams.get("priceMin") || "";
-  const priceMaxQuery = searchParams.get("priceMax") || "";
 
-  // Convertir parámetros de precio a números (o null si no se indican)
-  const priceMin = priceMinQuery ? parseFloat(priceMinQuery) : null;
-  const priceMax = priceMaxQuery ? parseFloat(priceMaxQuery) : null;
+  // Extraer valores iniciales de la URL
+  const initialSearch = searchParams.get("search") || "";
+  const initialCategory = searchParams.get("category") || "";
+  const initialPriceMin = searchParams.get("priceMin") || "0";
+  const initialPriceMax = searchParams.get("priceMax") || "1000";
 
+  // Estados locales para los filtros (interactivos)
+  const [filterSearch, setFilterSearch] = useState(initialSearch);
+  const [filterCategory, setFilterCategory] = useState(initialCategory);
+  const [filterPriceMin, setFilterPriceMin] = useState(initialPriceMin);
+  const [filterPriceMax, setFilterPriceMax] = useState(initialPriceMax);
+
+  // Estados para productos y loading
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Carga los productos de la API y las subastas creadas en localStorage
+  // Estado para mostrar/ocultar el dropdown de filtros
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Cargar productos desde la API y localStorage
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await fetch("https://fakestoreapi.com/products");
         const apiProducts = await res.json();
-
-        // Cargar subastas creadas en localStorage
-        const storedSubastas = JSON.parse(localStorage.getItem("subastas")) || [];
+        const storedSubastas =
+          JSON.parse(localStorage.getItem("subastas")) || [];
         const transformedSubastas = storedSubastas.map((auction) => ({
           id: auction.id,
           title: auction.titulo,
           description: auction.descripcion,
-          // Aquí, la imagen ya es un string (data URL)
-          image: auction.imagen,
+          image: auction.imagen, // La imagen ya es un string (data URL)
           price: auction.precioSalida,
           category: auction.categoria,
         }));
-
-        // Combinar ambas fuentes
         setProducts([...transformedSubastas, ...apiProducts]);
         setLoading(false);
       } catch (error) {
@@ -49,7 +54,7 @@ export default function SearchResults() {
     fetchProducts();
   }, []);
 
-  // Función para mapear la categoría de la URL a las categorías reales
+  // Función para mapear la categoría a las categorías reales
   const mapCategory = (cat) => {
     const lowerCat = cat.toLowerCase();
     switch (lowerCat) {
@@ -70,23 +75,32 @@ export default function SearchResults() {
     }
   };
 
-  // Filtrar productos (por búsqueda, categoría y precio)
+  // Filtrar productos en tiempo real usando los estados actuales de los filtros
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.title
       .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    const mappedCategories = mapCategory(categoryQuery);
+      .includes(filterSearch.toLowerCase());
+    const mappedCategories = mapCategory(filterCategory);
     const matchesCategory =
       !mappedCategories || mappedCategories.length === 0
         ? true
         : mappedCategories.includes(product.category);
+    const priceMinValue = parseFloat(filterPriceMin);
+    const priceMaxValue = parseFloat(filterPriceMax);
     const matchesPrice =
-      (priceMin === null || product.price >= priceMin) &&
-      (priceMax === null || product.price <= priceMax);
+      product.price >= priceMinValue && product.price <= priceMaxValue;
     return matchesSearch && matchesCategory && matchesPrice;
   });
 
-  // Función para agregar producto a la wishlist en localStorage
+  // Función para resetear filtros a sus valores por defecto
+  const handleResetFilters = () => {
+    setFilterSearch("");
+    setFilterCategory("");
+    setFilterPriceMin("0");
+    setFilterPriceMax("1000");
+  };
+
+  // Función para añadir producto a wishlist (localStorage)
   const handleAddToWishlist = (product) => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     const exists = wishlist.some((item) => item.id === product.id);
@@ -100,11 +114,85 @@ export default function SearchResults() {
   };
 
   return (
-    <div>
-      <header>
+    <div className={styles.container}>
+      {/* Encabezado con título y botón de filtros (hamburguesa) */}
+      <div className={styles.filtersHeader}>
         <h1>PRODUCTOS DESTACADOS</h1>
-      </header>
-      <main>
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className={styles.hamburgerButton}
+          aria-label="Toggle Filters"
+        >
+          <span className={styles.hamburger}></span>
+          <span className={styles.hamburger}></span>
+          <span className={styles.hamburger}></span>
+        </button>
+      </div>
+
+      {/* Dropdown de filtros debajo del encabezado */}
+      {showFilters && (
+        <div className={styles.filtersDropdown}>
+          <form className={styles.filterForm}>
+            <input
+              type="text"
+              placeholder="Buscar productos..."
+              value={filterSearch}
+              onChange={(e) => setFilterSearch(e.target.value)}
+              className={styles.filterInput}
+            />
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className={styles.filterSelect}
+            >
+              <option value="">Todas las categorías</option>
+              <option value="moda">Moda</option>
+              <option value="hogar">Hogar</option>
+              <option value="electronics">Electronics</option>
+              <option value="jewelery">Jewelery</option>
+              <option value="men's clothing">Men's Clothing</option>
+              <option value="women's clothing">Women's Clothing</option>
+            </select>
+            <div className={styles.sliderContainer}>
+              <label>
+                Precio mínimo: <strong>{filterPriceMin}€</strong>
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="1000"
+                value={filterPriceMin}
+                onChange={(e) => setFilterPriceMin(e.target.value)}
+                className={styles.filterSlider}
+              />
+            </div>
+            <div className={styles.sliderContainer}>
+              <label>
+                Precio máximo: <strong>{filterPriceMax}€</strong>
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="1000"
+                value={filterPriceMax}
+                onChange={(e) => setFilterPriceMax(e.target.value)}
+                className={styles.filterSlider}
+              />
+            </div>
+            <div className={styles.buttonsContainer}>
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className={styles.resetButton}
+              >
+                Resetear Filtros
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      <main className={styles.mainResults}>
         {loading ? (
           <p>Cargando productos...</p>
         ) : (
@@ -123,19 +211,20 @@ export default function SearchResults() {
                 <p>
                   <strong>Precio mínimo para la puja:</strong> {product.price}€
                 </p>
-                <Link href={`/subastas/${product.id}`}>
-                  <input
+                <div className={styles.productButtons}>
+                  <Link href={`/subastas/${product.id}`}>
+                    <button className={styles.detailsButton}>
+                      See Details
+                    </button>
+                  </Link>
+                  <button
                     type="button"
-                    value="See Details"
-                    className={styles.detailsButton}
-                  />
-                </Link>
-                {/* Botón para añadir a la wishlist */}
-                <input
-                  type="button"
-                  value="Add to Wishlist"
-                  onClick={() => handleAddToWishlist(product)}
-                />
+                    className={styles.wishlistButton}
+                    onClick={() => handleAddToWishlist(product)}
+                  >
+                    +
+                  </button>
+                </div>
               </article>
             ))}
           </section>

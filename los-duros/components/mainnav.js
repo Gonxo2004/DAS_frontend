@@ -52,9 +52,6 @@ function Navbar() {
             <Link href="/usuario" className={styles.accountLink}>
               Mi cuenta
             </Link>
-            <Link href="/subastas/crear" className={styles.createAuctionLink}>
-              Crear Subasta
-            </Link>
           </>
         )}
       </div>

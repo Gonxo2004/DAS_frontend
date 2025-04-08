@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import styles from "./page.module.css"; // Usa este nuevo CSS
+import styles from "./page.module.css";
 
 export default function MisSubastasPage() {
   const [subastas, setSubastas] = useState([]);
@@ -18,7 +18,7 @@ export default function MisSubastasPage() {
     }
   }, []);
 
-  // Función para eliminar una subasta (opcional)
+  // Función para eliminar una subasta
   const handleRemove = (id) => {
     const updated = subastas.filter((auction) => auction.id !== id);
     setSubastas(updated);
@@ -45,9 +45,15 @@ export default function MisSubastasPage() {
     <div>
       <header>
         <h1>Mis Subastas Públicas</h1>
-        <Link href="/subastas">
-          <button className={styles.btn}>Volver a Subastas</button>
-        </Link>
+        <div className={styles.buttonGroup}>
+          <Link href="/subastas">
+            <button className={styles.btn}>Volver al catálogo de subastas</button>
+          </Link>
+          {/* Botón añadido para crear una nueva subasta */}
+          <Link href="/subastas/crear">
+            <button className={styles.btn}>Añadir Subasta</button>
+          </Link>
+        </div>
       </header>
       <main>
         {subastas.length === 0 ? (
@@ -57,24 +63,27 @@ export default function MisSubastasPage() {
             {subastas.map((auction) => (
               <article key={auction.id} className={styles.product}>
                 <h4>{auction.titulo}</h4>
-                <Link href={`/subastas/${auction.id}`}>
-                  <img
-                    src={auction.imagen}
-                    alt={auction.titulo}
-                    className={styles.clickableImg}
-                  />
-                </Link>
+                <img
+                  src={auction.imagen}
+                  alt={auction.titulo}
+                  className={styles.clickableImg}
+                />
                 <p>{auction.descripcion}</p>
                 <p>
                   <strong>Precio de salida:</strong> {auction.precioSalida}€
                 </p>
-                <Link href={`/subastas/${auction.id}`}>
-                  <button className={styles.btn}>Ver Detalles</button>
-                </Link>
-                {/* Botón para eliminar la subasta (opcional) */}
-                <button onClick={() => handleRemove(auction.id)} className={styles.btn}>
-                  Eliminar Subasta
-                </button>
+                <div className={styles.buttonGroup}>
+                  {/* Enlace a la página de edición */}
+                  <Link href={`/subastas/${auction.id}/editar`}>
+                    <button className={styles.btn}>Editar Subasta</button>
+                  </Link>
+                  <button
+                    onClick={() => handleRemove(auction.id)}
+                    className={styles.btn}
+                  >
+                    Eliminar Subasta
+                  </button>
+                </div>
               </article>
             ))}
           </section>

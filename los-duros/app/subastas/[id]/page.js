@@ -1,125 +1,78 @@
-"use client"; // Necesario porque usamos useState y useEffect
+"use client";
+import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import styles from "./page.module.css"; // Puedes definir estilos específicos para el detalle
 
-import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation"; // Para recoger el id
-import Link from "next/link"; // Para la navegación
-import Reader from "../../../components/Reader"; // Ajusta la ruta según corresponda
-import styles from "./page.module.css";
-
-export default function ProductDetailPage() {
-  const { id } = useParams(); // Obtenemos el id desde la URL
-  const [product, setProduct] = useState(null);
-  const [bidValue, setBidValue] = useState("");
-  const [bidMessage, setBidMessage] = useState("");
-
-  // Función para convertir una fecha a formato YYYY-MM-DD
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "";
-    const date = new Date(dateStr);
-    if (isNaN(date)) return "";
-    return date.toISOString().split("T")[0];
-  };
+export default function AuctionDetails() {
+  const { id } = useParams();
+  const router = useRouter();
+  const [auction, setAuction] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) return; // Evita llamadas si `id` aún no está
-    console.log("Cargando producto con id:", id);
-    fetch(`https://fakestoreapi.com/products/${id}`)
-      .then((res) => {
-        if (!res.ok) {
-          console.error("Error en la respuesta del API:", res.status);
-          throw new Error("Error al obtener el producto");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("Datos recibidos:", data);
-        // Aseguramos que las fechas tengan el formato correcto
-        data.fechaCreacion = formatDate(data.fechaCreacion);
-        data.fechaLimite = formatDate(data.fechaLimite);
-        setProduct(data);
-      })
-      .catch((err) => console.error("Error fetching product:", err));
+    // Primero, intenta buscar la subasta en localStorage (subastas creadas por el usuario)
+    const storedSubastas = JSON.parse(localStorage.getItem("subastas")) || [];
+    const localAuction = storedSubastas.find((a) => a.id === id);
+    if (localAuction) {
+      setAuction(localAuction);
+      setLoading(false);
+    } else {
+      // Si no es una subasta creada localmente, intenta obtener el producto de la API
+      fetch(`https://fakestoreapi.com/products/${id}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Producto no encontrado");
+          }
+          return res.json();
+        })
+        .then((apiProduct) => {
+          setAuction(apiProduct);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching product details:", error);
+          setLoading(false);
+        });
+    }
   }, [id]);
 
-  // Función de puja
-  function handleBid(minimumBid) {
-    const currentBid = parseFloat(bidValue) || 0;
-    if (currentBid < minimumBid) {
-      setBidMessage(`La puja debe ser mayor a ${minimumBid}€`);
-    } else {
-      setBidMessage("¡Puja realizada con éxito!");
-    }
-  }
+  if (loading) return <div>Cargando detalles...</div>;
 
-  // Función para añadir a la wishlist
-  function handleAddToWishlist(product) {
-    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    const exists = wishlist.some((item) => item.id === product.id);
-    if (!exists) {
-      wishlist.push(product);
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
-    }
-  }
-
-  if (!product) {
-    return <p className={styles.loading}>Cargando producto...</p>;
-  }
+  if (!auction)
+    return (
+      <div>
+        <p>No se encontró el producto</p>
+        <button onClick={() => router.back()}>Volver</button>
+      </div>
+    );
 
   return (
-    <Reader>
-      <div className={styles.detailContainer}>
-        <main className={styles.mainContent}>
-          {/* Sección de imágenes */}
-          <div className={styles.imagesSection}>
-            <img
-              src={product.image}
-              alt={product.title}
-              className={styles.mainImage}
-            />
-          </div>
-
-          {/* Sección de información */}
-          <div className={styles.infoSection}>
-            <h2>{product.title}</h2>
-            <p className={styles.description}>{product.description}</p>
-            <p className={styles.price}>
-              <strong>Precio mínimo para la puja:</strong> {product.price}€
-            </p>
-
-            <input
-              type="number"
-              placeholder="Introduce tu puja"
-              min={product.price}
-              step="0.01"
-              value={bidValue}
-              onChange={(e) => setBidValue(e.target.value)}
-              className={styles.inputBid}
-            />
-            <p className={styles.bidMessage}>{bidMessage}</p>
-
-            <button
-              className={styles.bidButton}
-              onClick={() => handleBid(product.price)}
-            >
-              ¡Pujar ahora!
-            </button>
-
-            {/* Botón para añadir a la wishlist */}
-            <button
-              className={styles.wishlistButton}
-              onClick={() => handleAddToWishlist(product)}
-            >
-              Añadir a Wishlist
-            </button>
-
-            <Link href="/subastas">
-              <button className={styles.backButton}>
-                ← Volver a subastas
-              </button>
-            </Link>
-          </div>
-        </main>
-      </div>
-    </Reader>
+    <div className={styles.detailContainer}>
+      <h1>{auction.titulo || auction.title}</h1>
+      <img
+        src={auction.imagen || auction.image}
+        alt={auction.titulo || auction.title}
+        className={styles.productImage}
+      />
+      <p>{auction.descripcion || auction.description}</p>
+      <p>
+        <strong>
+          Precio de {auction.titulo ? "salida" : "venta"}:
+        </strong>{" "}
+        {auction.precioSalida || auction.price}€
+      </p>
+      {/* Si el producto es una subasta creada localmente, podrías agregar un botón para editarla */}
+      {auction.titulo && (
+        <button
+          onClick={() => router.push(`/subastas/${id}/editar`)}
+          className={styles.editButton}
+        >
+          Editar Subasta
+        </button>
+      )}
+      <button onClick={() => router.back()} className={styles.backButton}>
+        Volver
+      </button>
+    </div>
   );
 }
