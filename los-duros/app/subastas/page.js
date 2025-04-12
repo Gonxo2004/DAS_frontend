@@ -222,7 +222,7 @@ export default function SearchResults() {
                     className={styles.wishlistButton}
                     onClick={() => handleAddToWishlist(product)}
                   >
-                    +
+                    +ff
                   </button>
                 </div>
               </article>
