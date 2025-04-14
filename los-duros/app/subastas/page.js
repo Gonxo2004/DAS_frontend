@@ -33,18 +33,18 @@ export default function SearchResults() {
         const res = await fetch("http://127.0.0.1:8000/api/auctions/categories/");
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         const data = await res.json();
-        // Si se utiliza paginación, se extrae data.results; de lo contrario, se espera que data sea un arreglo
+        // Si se usa paginación, data.results. Si no, data es el array
         const fetchedCategories = data.results !== undefined ? data.results : data;
         setCategories(Array.isArray(fetchedCategories) ? fetchedCategories : []);
       } catch (error) {
         console.error("Error al cargar categorías:", error);
-        setCategories([]); // Aseguramos que categories sea un arreglo vacío en caso de error
+        setCategories([]);
       }
     };
     fetchCategories();
   }, []);
 
-  // Carga de subastas (productos) utilizando filtros del backend
+  // Carga de subastas (productos) con filtros del backend
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -63,7 +63,7 @@ export default function SearchResults() {
         const data = await res.json();
         // Si la API tiene paginación, extraemos data.results
         const fetchedProducts = data.results !== undefined ? data.results : data;
-        setProducts(fetchedProducts);
+        setProducts(Array.isArray(fetchedProducts) ? fetchedProducts : []);
       } catch (err) {
         console.error("Error al cargar subastas:", err);
       } finally {
@@ -73,7 +73,7 @@ export default function SearchResults() {
     fetchProducts();
   }, [filterSearch, filterCategory, filterPriceMin, filterPriceMax]);
 
-  // Resetear filtros a sus valores por defecto
+  // Resetear filtros
   const handleResetFilters = () => {
     setFilterSearch("");
     setFilterCategory("");
@@ -81,7 +81,7 @@ export default function SearchResults() {
     setFilterPriceMax("1500");
   };
 
-  // Función para agregar un producto a la wishlist (usando localStorage)
+  // Agregar un producto a la wishlist (localStorage)
   const handleAddToWishlist = (product) => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     const exists = wishlist.some((item) => item.id === product.id);
@@ -212,4 +212,3 @@ export default function SearchResults() {
     </div>
   );
 }
-

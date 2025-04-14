@@ -19,7 +19,7 @@
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
-  background-color: #4a90e2;
+  background-color: #ff6600;
   color: white;
   font-weight: bold;
   cursor: pointer;
@@ -27,13 +27,15 @@
 }
 
 .logoutButton:hover {
-  background-color: #e94e4e;
+  background-color: #000000;
 }
 
 .changePasswordButton:hover {
-  background-color: #ff9524;
+  background-color: #000000;
+  color: #ffffff;
 }
 
 .editProfileButton:hover {
-  background-color: #3cb371;
+  background-color: #000000;
+  color: #ffffff;
 }

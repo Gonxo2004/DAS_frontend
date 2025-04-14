@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
+import { useRouter } from "next/navigation";
 
 export default function MisSubastasPage() {
+  const router = useRouter();
   const [subastas, setSubastas] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -15,40 +17,60 @@ export default function MisSubastasPage() {
 
     setIsLoggedIn(true);
 
+    // Cargar perfil
     fetch("http://127.0.0.1:8000/api/users/profile/", {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          return res.text().then((t) => {
+            console.error("Error al obtener el perfil:", t);
+            throw new Error("Error al obtener el perfil");
+          });
+        }
+        return res.json();
+      })
       .then((user) => {
         setCurrentUser(user);
-
-        fetch("http://127.0.0.1:8000/api/auctions/", {
+        // Cargar todas las subastas y filtrar las del usuario
+        return fetch("http://127.0.0.1:8000/api/auctions/", {
           headers: { Authorization: `Bearer ${token}` },
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            const todas = Array.isArray(data.results) ? data.results : [];
-            const propias = todas.filter(
-              (auction) => auction.auctioneer === user.username
-            );
-            setSubastas(propias);
-          })
-          .catch((err) => {
-            console.error("Error al cargar subastas:", err);
-            setErrorMsg("No se pudieron cargar las subastas.");
+        });
+      })
+      .then((res) => {
+        if (!res.ok) {
+          return res.text().then((t) => {
+            console.error("Error al cargar subastas:", t);
+            throw new Error("Error al cargar subastas");
           });
+        }
+        return res.json();
+      })
+      .then((data) => {
+        // Según tu backend, si no hay paginación, data será array de subastas
+        // Si hay paginación, data.results será el array
+        const todas = Array.isArray(data.results) ? data.results : data;
+        // Filtrar subastas propias
+        if (currentUser) {
+          const propias = todas.filter(
+            (auction) => auction.auctioneer === currentUser.username
+          );
+          setSubastas(propias);
+        }
       })
       .catch((err) => {
-        console.error("Error al obtener el perfil:", err);
-        setErrorMsg("No se pudo cargar el usuario.");
+        console.error(err);
+        setErrorMsg("No se pudieron cargar las subastas o el usuario.");
       });
-  }, []);
+  }, [currentUser]);
 
-  // ✅ Función para eliminar subasta del backend
+  // Eliminar subasta del backend
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
-    const confirm = window.confirm("¿Estás seguro de que quieres eliminar esta subasta?");
-    if (!confirm) return;
+    const confirmDelete = window.confirm(
+      "¿Estás seguro de que quieres eliminar esta subasta?"
+    );
+    if (!confirmDelete) return;
 
     try {
       const response = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/`, {
@@ -134,5 +156,3 @@ export default function MisSubastasPage() {
     </div>
   );
 }
-
-
