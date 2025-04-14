@@ -1,108 +1,84 @@
-/* ============== */
-/* Contenedor principal del detalle */
-/* ============== */
 .detailContainer {
-  width: 90%;
+  padding: 2rem;
   max-width: 1200px;
-  margin: 2rem auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 12px;
-  color: #000;
+  margin: auto;
+  font-family: "Segoe UI", sans-serif;
 }
 
-/* Sección principal (imágenes e info) */
-.mainContent {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
-/* Sección de imágenes */
-.imagesSection {
-  flex: 1 1 300px;
-  background: #fff;
-  padding: 15px;
-  border: 1px solid #ced4da;
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Imagen principal */
-.mainImage {
-  width: 250px;
-  max-width: 100%;
-  border-radius: 12px;
-  object-fit: contain;
-}
-
-/* Sección de información */
-.infoSection {
-  flex: 1 1 300px;
-  background: #fff;
-  padding: 20px;
-  border: 1px solid #ced4da;
-  border-radius: 12px;
-  text-align: center;
-}
-
-.infoSection h2 {
-  margin-top: 0;
-  font-size: 1.5rem;
-}
-
-.description {
-  margin: 1rem 0;
-  line-height: 1.5;
-}
-
-.price {
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-}
-
-/* Input de puja */
-.inputBid {
-  width: 40%;
-  max-width: 200px;
-  padding: 10px;
-  margin-top: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  text-align: center;
-}
-
-/* ================== */
-/*  REGLAS UNIFICADAS */
-/* ================== */
-.bidButton,
-.wishlistButton,
 .backButton {
-  padding: 10px 20px;
-  margin: 5px;
+  margin-bottom: 1rem;
+  background-color: #ccc;
   border: none;
-  border-radius: 4px;
-  background-color: #ff6600;
-  color: #ffffff;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
 }
 
-.bidButton:hover,
-.wishlistButton:hover,
-.backButton:hover {
-  background-color: #000000;
-  color: #ffffff;
+.auctionDetailWrapper {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
 
-/* Texto de carga */
-.loading {
-  text-align: center;
-  font-size: 1.2rem;
-  margin: 30px 0;
-  color: #000;
+.imageFrame {
+  flex: 1;
+  max-width: 300px;
+}
+
+.auctionImage {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.detailsInfo {
+  flex: 2;
+  min-width: 300px;
+}
+
+.bidSection {
+  flex: 1;
+  min-width: 250px;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.bidSection h2 {
+  margin-top: 0;
+}
+
+.bidForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.bidForm input {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.bidForm button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.errorMsg {
+  color: red;
+  margin-top: 0.5rem;
+}
+
+.successMsg {
+  color: green;
+  margin-top: 0.5rem;
 }

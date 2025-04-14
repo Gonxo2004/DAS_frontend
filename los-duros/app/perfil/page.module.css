@@ -1,0 +1,39 @@
+.usuario {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra horizontalmente */
+  justify-content: center; /* Centra verticalmente */
+  text-align: center; /* Centra el texto */
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 16px; /* Espaciado entre botones */
+  margin-top: 24px;
+  flex-wrap: wrap; /* Por si en pantallas pequeñas no caben en una línea */
+}
+
+.logoutButton,
+.changePasswordButton,
+.editProfileButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4a90e2;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logoutButton:hover {
+  background-color: #e94e4e;
+}
+
+.changePasswordButton:hover {
+  background-color: #ff9524;
+}
+
+.editProfileButton:hover {
+  background-color: #3cb371;
+}

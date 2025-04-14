@@ -49,7 +49,7 @@ function Navbar() {
         {/* Si el usuario está logueado, mostramos Mi cuenta, Crear Subasta y Mis Subastas */}
         {loggedIn && (
           <>
-            <Link href="/usuario" className={styles.accountLink}>
+            <Link href="/perfil" className={styles.accountLink}>
               Mi cuenta
             </Link>
           </>
@@ -80,8 +80,8 @@ function Navbar() {
         <Link href="/subastas/misSubastas" className={styles.myAuctionsLink}>
           Mis Subastas
         </Link>
-        <Link href="/wishlist" className={styles.wishlistLink}>
-          Wishlist
+        <Link href="/favoritos" className={styles.wishlistLink}>
+          Favoritos
         </Link>
       </div>
     </nav>

@@ -5,80 +5,110 @@ import styles from "./page.module.css";
 
 export default function CrearSubasta() {
   const router = useRouter();
+
   const [formData, setFormData] = useState({
-    titulo: "",
-    descripcion: "",
-    fechaLimite: "",
-    // Fecha actual en formato YYYY-MM-DD
-    fechaCreacion: new Date().toISOString().split("T")[0],
-    imagen: "",
-    precioSalida: "",
+    title: "",
+    description: "",
+    closing_date: "",
+    thumbnail: "",
+    price: "",
     stock: "",
-    valoracion: "",
-    categoria: "",
-    marca: "",
+    rating: "",
+    category: "", // se enviará el ID
+    brand: "",
   });
 
-  // Verifica que el usuario esté autenticado
+  const [categorias, setCategorias] = useState([]);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login");
-    }
+    if (!token) router.push("/login");
+  
+    fetch("http://127.0.0.1:8000/api/auctions/categories/")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Categorías recibidas:", data);
+        const categorias = Array.isArray(data.results) ? data.results : [];
+        setCategorias(categorias);
+      })
+      .catch((err) => {
+        console.error("Error cargando categorías:", err);
+        setErrorMsg("No se pudieron cargar las categorías.");
+      });
   }, [router]);
 
-  // Manejo de cambios en los inputs
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files && files[0]) {
-      // Convertir el archivo a data URL usando FileReader
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev) => ({ ...prev, [name]: reader.result }));
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Genera un identificador único (ejemplo; en producción lo haría el backend)
-  const generateUniqueId = () => {
-    return Date.now().toString() + Math.floor(Math.random() * 1000).toString();
-  };
-
-  // Manejo del envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
+    setSuccessMsg("");
 
-    const nuevaSubasta = {
-      ...formData,
-      id: generateUniqueId(),
-      estado: "abierta",
-    };
+    const token = localStorage.getItem("token");
 
-    // Guarda la nueva subasta en localStorage
-    const storedSubastas = JSON.parse(localStorage.getItem("subastas")) || [];
-    storedSubastas.push(nuevaSubasta);
-    localStorage.setItem("subastas", JSON.stringify(storedSubastas));
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/auctions/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          closing_date: new Date(formData.closing_date).toISOString(),
+          thumbnail: formData.thumbnail,
+          price: parseFloat(formData.price),
+          stock: parseInt(formData.stock),
+          rating: parseInt(formData.rating),
+          brand: formData.brand,
+          category: formData.category,
+        }),
+      });
 
-    // Redirige a la página principal de subastas
-    router.push("/subastas");
+      let data;
+      try {
+        data = await response.json();
+      } catch (err) {
+        throw new Error("Respuesta no válida del servidor.");
+      }
+
+      if (!response.ok) {
+        const errores = Object.entries(data)
+          .map(([campo, mensajes]) => `${campo}: ${mensajes.join(", ")}`)
+          .join(" | ");
+        setErrorMsg(errores || "Error al crear subasta.");
+        return;
+      }
+
+      setSuccessMsg("Subasta creada correctamente.");
+      setTimeout(() => router.push("/subastas"), 2000);
+    } catch (err) {
+      console.error("Error al enviar subasta:", err);
+      setErrorMsg("Error al conectar con el servidor.");
+    }
   };
 
   return (
     <div className={styles.mainCrearSubasta}>
       <h2>Crear Nueva Subasta</h2>
+
+      {errorMsg && <p style={{ color: "red", fontWeight: "bold" }}>{errorMsg}</p>}
+      {successMsg && <p style={{ color: "green", fontWeight: "bold" }}>{successMsg}</p>}
+
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label className={styles.labelText}>Título:</label>
           <input
             type="text"
-            name="titulo"
+            name="title"
             className={styles.inputField}
-            placeholder="Ingresa el título"
-            value={formData.titulo}
+            value={formData.title}
             onChange={handleChange}
             required
           />
@@ -86,54 +116,44 @@ export default function CrearSubasta() {
         <div className={styles.formGroup}>
           <label className={styles.labelText}>Descripción:</label>
           <textarea
-            name="descripcion"
+            name="description"
             className={styles.inputField}
-            placeholder="Ingresa la descripción"
-            value={formData.descripcion}
+            value={formData.description}
             onChange={handleChange}
             required
-          ></textarea>
+          />
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.labelText}>Fecha límite para cierre:</label>
+          <label className={styles.labelText}>Fecha de cierre:</label>
           <input
             type="date"
-            name="fechaLimite"
+            name="closing_date"
             className={styles.inputField}
-            value={formData.fechaLimite}
+            value={formData.closing_date}
             onChange={handleChange}
             required
           />
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.labelText}>Fecha de creación:</label>
+          <label className={styles.labelText}>Thumbnail (URL):</label>
           <input
-            type="date"
-            name="fechaCreacion"
+            type="url"
+            name="thumbnail"
             className={styles.inputField}
-            value={formData.fechaCreacion}
-            readOnly
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Imagen:</label>
-          <input
-            type="file"
-            name="imagen"
-            className={styles.inputField}
+            value={formData.thumbnail}
             onChange={handleChange}
-            accept="image/*"
             required
           />
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.labelText}>Precio de salida:</label>
+          <label className={styles.labelText}>Precio:</label>
           <input
             type="number"
-            name="precioSalida"
+            name="price"
             className={styles.inputField}
-            value={formData.precioSalida}
+            value={formData.price}
             onChange={handleChange}
+            min="1"
             required
           />
         </div>
@@ -145,42 +165,53 @@ export default function CrearSubasta() {
             className={styles.inputField}
             value={formData.stock}
             onChange={handleChange}
+            min="1"
             required
           />
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.labelText}>Valoración:</label>
+          <label className={styles.labelText}>Valoración (1-5):</label>
           <input
             type="number"
-            name="valoracion"
+            name="rating"
             className={styles.inputField}
-            value={formData.valoracion}
+            value={formData.rating}
             onChange={handleChange}
+            min="1"
+            max="5"
             required
           />
         </div>
         <div className={styles.formGroup}>
           <label className={styles.labelText}>Categoría:</label>
-          <input
-            type="text"
-            name="categoria"
+          <select
+            name="category"
             className={styles.inputField}
-            value={formData.categoria}
+            value={formData.category}
             onChange={handleChange}
             required
-          />
+          >
+            <option value="">-- Selecciona una categoría --</option>
+            {Array.isArray(categorias) &&
+              categorias.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+          </select>
         </div>
         <div className={styles.formGroup}>
           <label className={styles.labelText}>Marca:</label>
           <input
             type="text"
-            name="marca"
+            name="brand"
             className={styles.inputField}
-            value={formData.marca}
+            value={formData.brand}
             onChange={handleChange}
             required
           />
         </div>
+
         <button type="submit" className={styles.submitButton}>
           Crear Subasta
         </button>

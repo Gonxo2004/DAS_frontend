@@ -8,99 +8,80 @@ export default function SearchResults() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Extraer valores iniciales de la URL
+  // Valores iniciales desde la URL
   const initialSearch = searchParams.get("search") || "";
   const initialCategory = searchParams.get("category") || "";
   const initialPriceMin = searchParams.get("priceMin") || "0";
-  const initialPriceMax = searchParams.get("priceMax") || "1000";
+  const initialPriceMax = searchParams.get("priceMax") || "1500";
 
-  // Estados locales para los filtros (interactivos)
+  // Estados para filtros
   const [filterSearch, setFilterSearch] = useState(initialSearch);
   const [filterCategory, setFilterCategory] = useState(initialCategory);
   const [filterPriceMin, setFilterPriceMin] = useState(initialPriceMin);
   const [filterPriceMax, setFilterPriceMax] = useState(initialPriceMax);
 
-  // Estados para productos y loading
+  // Estados para categorías, productos y loading
+  const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Estado para mostrar/ocultar el dropdown de filtros
   const [showFilters, setShowFilters] = useState(false);
 
-  // Cargar productos desde la API y localStorage
+  // FETCH CATEGORÍAS
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/api/auctions/categories/");
+        if (!res.ok) throw new Error(`Error: ${res.status}`);
+        const data = await res.json();
+        // Si se utiliza paginación, se extrae data.results; de lo contrario, se espera que data sea un arreglo
+        const fetchedCategories = data.results !== undefined ? data.results : data;
+        setCategories(Array.isArray(fetchedCategories) ? fetchedCategories : []);
+      } catch (error) {
+        console.error("Error al cargar categorías:", error);
+        setCategories([]); // Aseguramos que categories sea un arreglo vacío en caso de error
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Carga de subastas (productos) utilizando filtros del backend
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://fakestoreapi.com/products");
-        const apiProducts = await res.json();
-        const storedSubastas =
-          JSON.parse(localStorage.getItem("subastas")) || [];
-        const transformedSubastas = storedSubastas.map((auction) => ({
-          id: auction.id,
-          title: auction.titulo,
-          description: auction.descripcion,
-          image: auction.imagen, // La imagen ya es un string (data URL)
-          price: auction.precioSalida,
-          category: auction.categoria,
-        }));
-        setProducts([...transformedSubastas, ...apiProducts]);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching products:", error);
+        setLoading(true);
+        const params = new URLSearchParams();
+        if (filterSearch.length >= 3) params.append("search", filterSearch);
+        if (filterCategory) params.append("category_id", filterCategory);
+        if (filterPriceMin) params.append("min_price", filterPriceMin);
+        if (filterPriceMax) params.append("max_price", filterPriceMax);
+
+        const url = `http://127.0.0.1:8000/api/auctions/?${params.toString()}`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error(`HTTP error ${res.status}`);
+        }
+        const data = await res.json();
+        // Si la API tiene paginación, extraemos data.results
+        const fetchedProducts = data.results !== undefined ? data.results : data;
+        setProducts(fetchedProducts);
+      } catch (err) {
+        console.error("Error al cargar subastas:", err);
+      } finally {
         setLoading(false);
       }
     };
-
     fetchProducts();
-  }, []);
+  }, [filterSearch, filterCategory, filterPriceMin, filterPriceMax]);
 
-  // Función para mapear la categoría a las categorías reales
-  const mapCategory = (cat) => {
-    const lowerCat = cat.toLowerCase();
-    switch (lowerCat) {
-      case "moda":
-        return ["men's clothing", "women's clothing"];
-      case "hogar":
-        return ["jewelery"];
-      case "electronics":
-        return ["electronics"];
-      case "jewelery":
-        return ["jewelery"];
-      case "men's clothing":
-        return ["men's clothing"];
-      case "women's clothing":
-        return ["women's clothing"];
-      default:
-        return null;
-    }
-  };
-
-  // Filtrar productos en tiempo real usando los estados actuales de los filtros
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.title
-      .toLowerCase()
-      .includes(filterSearch.toLowerCase());
-    const mappedCategories = mapCategory(filterCategory);
-    const matchesCategory =
-      !mappedCategories || mappedCategories.length === 0
-        ? true
-        : mappedCategories.includes(product.category);
-    const priceMinValue = parseFloat(filterPriceMin);
-    const priceMaxValue = parseFloat(filterPriceMax);
-    const matchesPrice =
-      product.price >= priceMinValue && product.price <= priceMaxValue;
-    return matchesSearch && matchesCategory && matchesPrice;
-  });
-
-  // Función para resetear filtros a sus valores por defecto
+  // Resetear filtros a sus valores por defecto
   const handleResetFilters = () => {
     setFilterSearch("");
     setFilterCategory("");
     setFilterPriceMin("0");
-    setFilterPriceMax("1000");
+    setFilterPriceMax("1500");
   };
 
-  // Función para añadir producto a wishlist (localStorage)
+  // Función para agregar un producto a la wishlist (usando localStorage)
   const handleAddToWishlist = (product) => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     const exists = wishlist.some((item) => item.id === product.id);
@@ -115,9 +96,10 @@ export default function SearchResults() {
 
   return (
     <div className={styles.container}>
-      {/* Encabezado con título y botón de filtros (hamburguesa) */}
       <div className={styles.filtersHeader}>
-        <h1>PRODUCTOS DESTACADOS</h1>
+        <h1 style={{ textAlign: "center", width: "100%" }}>
+          PRODUCTOS DESTACADOS
+        </h1>
         <button
           onClick={() => setShowFilters(!showFilters)}
           className={styles.hamburgerButton}
@@ -129,7 +111,6 @@ export default function SearchResults() {
         </button>
       </div>
 
-      {/* Dropdown de filtros debajo del encabezado */}
       {showFilters && (
         <div className={styles.filtersDropdown}>
           <form className={styles.filterForm}>
@@ -146,12 +127,11 @@ export default function SearchResults() {
               className={styles.filterSelect}
             >
               <option value="">Todas las categorías</option>
-              <option value="moda">Moda</option>
-              <option value="hogar">Hogar</option>
-              <option value="electronics">Electronics</option>
-              <option value="jewelery">Jewelery</option>
-              <option value="men's clothing">Men's Clothing</option>
-              <option value="women's clothing">Women's Clothing</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
             </select>
             <div className={styles.sliderContainer}>
               <label>
@@ -160,7 +140,8 @@ export default function SearchResults() {
               <input
                 type="range"
                 min="0"
-                max="1000"
+                max="10000"
+                step="10"
                 value={filterPriceMin}
                 onChange={(e) => setFilterPriceMin(e.target.value)}
                 className={styles.filterSlider}
@@ -173,7 +154,8 @@ export default function SearchResults() {
               <input
                 type="range"
                 min="0"
-                max="1000"
+                max="10000"
+                step="10"
                 value={filterPriceMax}
                 onChange={(e) => setFilterPriceMax(e.target.value)}
                 className={styles.filterSlider}
@@ -196,33 +178,30 @@ export default function SearchResults() {
         {loading ? (
           <p>Cargando productos...</p>
         ) : (
-          <section id="search-results" className={styles.searchResults}>
-            {filteredProducts.map((product) => (
+          <section className={styles.searchResults}>
+            {products.map((product) => (
               <article key={product.id} className={styles.product}>
                 <h4>{product.title}</h4>
                 <Link href={`/subastas/${product.id}`}>
                   <img
-                    src={product.image}
+                    src={product.thumbnail}
                     alt={product.title}
                     className={styles.clickableImg}
                   />
                 </Link>
-                <p>{product.description}</p>
                 <p>
-                  <strong>Precio mínimo para la puja:</strong> {product.price}€
+                  <strong>Precio inicial:</strong> {product.price}€
                 </p>
                 <div className={styles.productButtons}>
                   <Link href={`/subastas/${product.id}`}>
-                    <button className={styles.detailsButton}>
-                      See Details
-                    </button>
+                    <button className={styles.detailsButton}>Ver más</button>
                   </Link>
                   <button
                     type="button"
                     className={styles.wishlistButton}
                     onClick={() => handleAddToWishlist(product)}
                   >
-                    +ff
+                    Añadir a favoritos
                   </button>
                 </div>
               </article>
@@ -233,3 +212,4 @@ export default function SearchResults() {
     </div>
   );
 }
+
