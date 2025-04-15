@@ -4,47 +4,41 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
 
-export default function SearchResults() {
+export default function SubastasPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Valores iniciales desde la URL
   const initialSearch = searchParams.get("search") || "";
   const initialCategory = searchParams.get("category") || "";
   const initialPriceMin = searchParams.get("priceMin") || "0";
   const initialPriceMax = searchParams.get("priceMax") || "1500";
 
-  // Estados para filtros
   const [filterSearch, setFilterSearch] = useState(initialSearch);
   const [filterCategory, setFilterCategory] = useState(initialCategory);
   const [filterPriceMin, setFilterPriceMin] = useState(initialPriceMin);
   const [filterPriceMax, setFilterPriceMax] = useState(initialPriceMax);
 
-  // Estados para categorías, productos y loading
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
 
-  // FETCH CATEGORÍAS
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const res = await fetch("http://127.0.0.1:8000/api/auctions/categories/");
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         const data = await res.json();
-        // Si se utiliza paginación, se extrae data.results; de lo contrario, se espera que data sea un arreglo
         const fetchedCategories = data.results !== undefined ? data.results : data;
         setCategories(Array.isArray(fetchedCategories) ? fetchedCategories : []);
       } catch (error) {
         console.error("Error al cargar categorías:", error);
-        setCategories([]); // Aseguramos que categories sea un arreglo vacío en caso de error
+        setCategories([]);
       }
     };
     fetchCategories();
   }, []);
 
-  // Carga de subastas (productos) utilizando filtros del backend
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -57,11 +51,8 @@ export default function SearchResults() {
 
         const url = `http://127.0.0.1:8000/api/auctions/?${params.toString()}`;
         const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error(`HTTP error ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
         const data = await res.json();
-        // Si la API tiene paginación, extraemos data.results
         const fetchedProducts = data.results !== undefined ? data.results : data;
         setProducts(fetchedProducts);
       } catch (err) {
@@ -73,7 +64,6 @@ export default function SearchResults() {
     fetchProducts();
   }, [filterSearch, filterCategory, filterPriceMin, filterPriceMax]);
 
-  // Resetear filtros a sus valores por defecto
   const handleResetFilters = () => {
     setFilterSearch("");
     setFilterCategory("");
@@ -81,7 +71,6 @@ export default function SearchResults() {
     setFilterPriceMax("1500");
   };
 
-  // Función para agregar un producto a la wishlist (usando localStorage)
   const handleAddToWishlist = (product) => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     const exists = wishlist.some((item) => item.id === product.id);

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de registro</title>
+  <link rel="icon" href="../imgs/home-logo.webp" type="image/x-icon">
+  <link rel="stylesheet" href="../css/registro.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a class= "home" href="../index.html">
+        <img class = "home-logo" src="../imgs/home-logo.webp" alt="Home" >
+      </a>
+      <a href="../html/resultados_busqueda.html">Más buscados</a>
+      <a class="active" href="../html/registro.html">Registro</a>
+      <a href="../html/Login.html">Login</a>
+    </nav>
+    <h1>SUBASTA LOS DUROS</h1>
+  </header>
+
+  <main>
+    <h1>Formulario de registro</h1>
+    <h3>Por favor, rellena los siguientes datos para registrarte</h3>
+    
+    <fieldset>
+      <form onsubmit="return compararContraseñas()">
+    
+        <div class="form-group">
+          <label for="fname">Nombre:</label>
+          <input type="text" id="fname" name="fname" placeholder="Vinicius" required>
+        </div>
+
+        <div class="form-group">
+          <label for="sname">Apellidos:</label>
+          <input type="text" id="sname" name="sname" placeholder="Junior" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="dni">DNI/NIE:</label>
+          <input type="text" id="dni" name="dni" placeholder="12345678A" required>
+        </div>
+
+        <div class="form-group">
+          <label for="fechanac">Fecha de nacimiento:</label>
+          <input type="date" id="fechanac" name="fechanac" required>
+        </div>
+
+        <div class="form-group">
+          <label for="usuario">Usuario:</label>
+          <input type="text" id="usuario" name="usuario" placeholder="vinijrcrack123" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Correo electrónico:</label>
+          <input type="email" id="email" name="email" placeholder="vinijr23@gmail.com" required>
+        </div>
+
+        <!-- Campo "Dirección" más extenso => full-width -->
+        <div class="form-group full-width">
+          <label for="direccion">Dirección:</label>
+          <input type="text" id="direccion" name="direccion"
+                 placeholder="c/ Alberto Aguilera 23, Piso 3, 3º A" required>
+        </div>
+
+        <div class="form-group">
+          <label for="comunidad">Comunidad Autónoma:</label>
+          <select id="comunidad" name="comunidad" required>
+            <option value="">-- Selecciona tu comunidad --</option>
+            <option value="Andalucía">Andalucía</option>
+            <option value="Aragón">Aragón</option>
+            <option value="Asturias">Asturias</option>
+            <option value="Baleares">Islas Baleares</option>
+            <option value="Canarias">Islas Canarias</option>
+            <option value="Cantabria">Cantabria</option>
+            <option value="Castilla-La Mancha">Castilla-La Mancha</option>
+            <option value="Castilla y León">Castilla y León</option>
+            <option value="Cataluña">Cataluña</option>
+            <option value="Comunidad de Madrid">Comunidad de Madrid</option>
+            <option value="Comunidad Valenciana">Comunidad Valenciana</option>
+            <option value="Extremadura">Extremadura</option>
+            <option value="Galicia">Galicia</option>
+            <option value="La Rioja">La Rioja</option>
+            <option value="Murcia">Región de Murcia</option>
+            <option value="Navarra">Navarra</option>
+            <option value="País Vasco">País Vasco</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="ciudad">Ciudad:</label>
+          <select id="ciudad" name="ciudad" required disabled>
+            <option value="">-- Selecciona tu ciudad --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="contraseña">Contraseña:</label>
+          <input type="password" id="contraseña" name="contraseña" minlength="8" required>
+        </div>
+
+        <div class="form-group">
+          <label for="contraseña2">Confirmación contraseña:</label>
+          <input type="password" id="contraseña2" name="contraseña2" minlength="8" required>
+          <p id="error_msg" style="color: red;"></p>
+        </div>
+
+        <div class="form-group">
+          <label for="myfile">Imagen:</label>
+          <input type="file" id="myfile" name="myfile">
+        </div>
+
+        <!-- Scripts -->
+        <script src="../js/password.js"></script>
+        <script src="../js/comparar_ciudades.js"></script>
+
+        <!-- Botones + flecha a la derecha -->
+        <div class="form-actions">
+          <a href="./Login.html">
+            <img src="../imgs/flecha.png" alt="flecha" width="30" height="30">
+          </a>
+          <input type="submit" value="Enviar">
+          <input type="reset" value="Reset">
+        </div>
+
+      </form>
+    </fieldset>
+  </main>
+
+  <footer>
+    Creado por <b>Gonzalo Borrachero y Luis García</b> - <i>2025</i>
+  </footer>
+</body>
+</html>
+
+
