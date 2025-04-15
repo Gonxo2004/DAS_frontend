@@ -33,7 +33,7 @@ export default function EditarSubasta() {
     }
 
     // Cargar subasta
-    fetch(`http://127.0.0.1:8000/api/auctions/${id}/`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auctions/${id}/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
