@@ -30,7 +30,7 @@ export default function SearchResults() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/auctions/categories/");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auctions/categories/`);
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         const data = await res.json();
         // Si se usa paginación, data.results. Si no, data es el array

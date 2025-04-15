@@ -18,7 +18,7 @@ export default function MisSubastasPage() {
     setIsLoggedIn(true);
 
     // Cargar perfil
-    fetch("http://127.0.0.1:8000/api/users/profile/", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/profile/`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

@@ -37,7 +37,7 @@ export default function EditarPerfil() {
       return;
     }
 
-    fetch("http://127.0.0.1:8000/api/users/profile/", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/profile/`, {
       headers: {
         "Authorization": `Bearer ${token}`,
       },

@@ -23,8 +23,8 @@ export default function AuctionDetails() {
       try {
         // 1) Obtener los dos fetch de forma simultánea
         const [auctionRes, bidsRes] = await Promise.all([
-          fetch(`http://127.0.0.1:8000/api/auctions/${id}/`),
-          fetch(`http://127.0.0.1:8000/api/auctions/${id}/bid/`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auctions/${id}/`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auctions/${id}/bid/`),
         ]);
 
         // 2) Revisar si la respuesta no es "ok" => HTML de error

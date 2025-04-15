@@ -26,7 +26,7 @@ export default function CrearSubasta() {
     const token = localStorage.getItem("token");
     if (!token) router.push("/login");
   
-    fetch("http://127.0.0.1:8000/api/auctions/categories/")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auctions/categories/`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Categorías recibidas:", data);
