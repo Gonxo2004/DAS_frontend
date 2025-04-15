@@ -189,6 +189,7 @@ export default function SearchResults() {
                     className={styles.clickableImg}
                   />
                 </Link>
+                <p>Descripción: {product.description}</p>
                 <p>
                   <strong>Precio inicial:</strong> {product.price}€
                 </p>
