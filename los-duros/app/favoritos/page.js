@@ -45,7 +45,7 @@ export default function WishlistPage() {
   return (
     <div>
       <header>
-        <h1>Mi Wishlist</h1>
+        <h1>Mis Favoritos</h1>
         {/* Botón para volver a Subastas */}
         <Link href="/subastas">
           <button className={styles.btn}>Ir a Subastas</button>
@@ -62,24 +62,24 @@ export default function WishlistPage() {
                 <h4>{product.title}</h4>
                 <Link href={`/subastas/${product.id}`}>
                   <img
-                    src={product.image}
+                    src={product.thumbnail}
                     alt={product.title}
                     className={styles.clickableImg}
                   />
                 </Link>
                 <p>{product.description}</p>
                 <p>
-                  <strong>Precio mínimo para la puja:</strong> {product.price}€
+                  <strong>Precio inicial:</strong> {product.price}€
                 </p>
                 <Link href={`/subastas/${product.id}`}>
-                  <button className={styles.btn}>See Details</button>
+                  <button className={styles.btn}>Ver más</button>
                 </Link>
                 {/* Botón para eliminar de la wishlist */}
                 <button
                   onClick={() => handleRemove(product.id)}
                   className={styles.btn}
                 >
-                  Remove from Wishlist
+                  Eliminar de favoritos
                 </button>
               </article>
             ))}
