@@ -55,7 +55,7 @@ export default function SearchResults() {
         if (filterPriceMin) params.append("min_price", filterPriceMin);
         if (filterPriceMax) params.append("max_price", filterPriceMax);
 
-        const url = `http://127.0.0.1:8000/api/auctions/?${params.toString()}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/auctions/?${params.toString()}`;
         const res = await fetch(url);
         if (!res.ok) {
           throw new Error(`HTTP error ${res.status}`);

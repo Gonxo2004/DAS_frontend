@@ -33,7 +33,7 @@ export default function MisSubastasPage() {
       .then((user) => {
         setCurrentUser(user);
         // Cargar todas las subastas y filtrar las del usuario
-        return fetch("http://127.0.0.1:8000/api/auctions/", {
+        return fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auctions/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       })
@@ -73,7 +73,7 @@ export default function MisSubastasPage() {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auctions/${id}/`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

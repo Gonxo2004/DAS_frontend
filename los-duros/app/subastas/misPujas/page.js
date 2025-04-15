@@ -114,7 +114,7 @@ export default function MisPujas() {
       return;
     }
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/auctions/${auctionId}/bid/${bidId}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auctions/${auctionId}/bid/${bidId}/`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -54,7 +54,7 @@ export default function EditarSubasta() {
       });
 
     // Cargar categorías
-    fetch("http://127.0.0.1:8000/api/auctions/categories")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auctions/categories`)
       .then((res) => res.json())
       .then((data) => {
         const cats = Array.isArray(data.results) ? data.results : [];
@@ -75,7 +75,7 @@ export default function EditarSubasta() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auctions/${id}/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
