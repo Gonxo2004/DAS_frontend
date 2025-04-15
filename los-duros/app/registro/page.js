@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Reader from "../../components/Reader";
@@ -27,15 +27,18 @@ const ciudadesPorComunidad = {
 export default function Registro() {
   const router = useRouter();
 
-  // Estados para el formulario
+  // Estados para comunidad y ciudades
   const [comunidad, setComunidad] = useState("");
   const [ciudades, setCiudades] = useState([]);
 
+  // Estados para contraseñas
   const [pass1, setPass1] = useState("");
   const [pass2, setPass2] = useState("");
-  
-  // Aquí acumularemos mensajes de error para mostrarlos en el UI (contraseñas o errores del servidor)
+
+  // Mensajes de error y éxito
   const [errorMsg, setErrorMsg] = useState("");
+  // successMsg se usará para controlar si hubo registro exitoso.
+  const [successMsg, setSuccessMsg] = useState("");
 
   // Campos que se mandan al backend
   const [fname, setFname] = useState("");
@@ -44,9 +47,7 @@ export default function Registro() {
   const [usuario, setUsuario] = useState("");
   const [email, setEmail] = useState("");
 
-  // Otros campos del formulario (no se envían)
-  const [dni, setDni] = useState("");
-  const [direccion, setDireccion] = useState("");
+  // Estado para la ciudad seleccionada
   const [ciudadSeleccionada, setCiudadSeleccionada] = useState("");
 
   useEffect(() => {
@@ -65,8 +66,6 @@ export default function Registro() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
-    // Limpiamos errores previos antes de realizar validaciones
     setErrorMsg("");
 
     if (!comunidad) {
@@ -82,6 +81,7 @@ export default function Registro() {
       return;
     }
 
+    // Creamos el body con los campos que espera el backend
     const body = {
       username: usuario,
       email: email,
@@ -94,46 +94,52 @@ export default function Registro() {
     };
 
     try {
-      const response = await fetch(
-        "https://das-p2-backend.onrender.com/api/users/register/",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        }
-      );
+      const response = await fetch("http://127.0.0.1:8000/api/users/register/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 
-      // Limpiamos el localStorage para borrar datos anteriores
-      localStorage.clear();
-
+      // Si la respuesta no es correcta, mostramos errores
       if (!response.ok) {
-        // Intentamos parsear el JSON de error
         try {
           const errorData = await response.json();
-          
-          // errorData puede tener múltiples campos: password, username, etc.
-          // Convertimos todo en un único string para mostrarlo
-          const mensajes = Object.values(errorData)
-            .flat()
-            .join(". ");
-
+          const mensajes = Object.values(errorData).flat().join(". ");
           setErrorMsg(mensajes || "No se pudo registrar (Error desconocido).");
         } catch (jsonErr) {
-          // Si no era JSON, leemos el texto en crudo
           const errorText = await response.text();
           setErrorMsg(errorText || "No se pudo registrar (Error desconocido).");
         }
         return;
       }
 
-      // Si llega aquí, es que todo fue bien
-      const newUser = await response.json();
-      // Redireccionamos al login (ya no mostramos nada por consola)
-      router.push("/login");
+      await response.json();
+      // Establecemos el mensaje de éxito
+      setSuccessMsg("Haz clic en el botón para iniciar sesión");
     } catch (error) {
-      // Error de conexión
       setErrorMsg("Error de conexión con el servidor");
     }
+  }
+
+  // Si hubo registro exitoso, reemplazamos el contenido del formulario
+  if (successMsg) {
+    return (
+      <Reader>
+        <main className={styles.mainRegistro}>
+          <div 
+            className={styles.successMsg}
+          >
+            <h2>¡Registro Exitoso!</h2>
+            <p>{successMsg}</p>
+            <button 
+              onClick={() => router.push("/login")}
+            >
+              Iniciar sesión
+            </button>
+          </div>
+        </main>
+      </Reader>
+    );
   }
 
   return (
@@ -141,14 +147,11 @@ export default function Registro() {
       <main className={styles.mainRegistro}>
         <h1>Formulario de registro</h1>
         <h3>Por favor, rellena los siguientes datos para registrarte</h3>
-
-        {/* Muestra el mensaje de error si existe */}
         {errorMsg && (
           <div style={{ color: "red", marginBottom: "1rem" }}>
             {errorMsg}
           </div>
         )}
-
         <fieldset>
           <form onSubmit={handleSubmit}>
             {/* Campo: Nombre */}
@@ -164,7 +167,6 @@ export default function Registro() {
                 onChange={(e) => setFname(e.target.value)}
               />
             </div>
-
             {/* Campo: Apellidos */}
             <div className={styles.formGroup}>
               <label htmlFor="sname" className={styles.labelText}>Apellidos:</label>
@@ -178,21 +180,6 @@ export default function Registro() {
                 onChange={(e) => setSname(e.target.value)}
               />
             </div>
-
-            {/* Campo: DNI */}
-            <div className={styles.formGroup}>
-              <label htmlFor="dni" className={styles.labelText}>DNI/NIE:</label>
-              <input
-                className={styles.inputField}
-                type="text"
-                id="dni"
-                placeholder="12345678A"
-                required
-                value={dni}
-                onChange={(e) => setDni(e.target.value)}
-              />
-            </div>
-
             {/* Campo: Fecha de nacimiento */}
             <div className={styles.formGroup}>
               <label htmlFor="fechanac" className={styles.labelText}>Fecha de nacimiento:</label>
@@ -205,7 +192,6 @@ export default function Registro() {
                 onChange={(e) => setFechanac(e.target.value)}
               />
             </div>
-
             {/* Campo: Usuario */}
             <div className={styles.formGroup}>
               <label htmlFor="usuario" className={styles.labelText}>Usuario:</label>
@@ -219,8 +205,7 @@ export default function Registro() {
                 onChange={(e) => setUsuario(e.target.value)}
               />
             </div>
-
-            {/* Campo: Email */}
+            {/* Campo: Correo electrónico */}
             <div className={styles.formGroup}>
               <label htmlFor="email" className={styles.labelText}>Correo electrónico:</label>
               <input
@@ -233,24 +218,11 @@ export default function Registro() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-
-            {/* Campo: Dirección */}
-            <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-              <label htmlFor="direccion" className={styles.labelText}>Dirección:</label>
-              <input
-                className={styles.inputField}
-                type="text"
-                id="direccion"
-                placeholder="c/ Alberto Aguilera 23"
-                required
-                value={direccion}
-                onChange={(e) => setDireccion(e.target.value)}
-              />
-            </div>
-
-            {/* Campo: Comunidad */}
+            {/* Campo: Comunidad Autónoma */}
             <div className={styles.formGroup}>
-              <label htmlFor="comunidad" className={styles.labelText}>Comunidad Autónoma:</label>
+              <label htmlFor="comunidad" className={styles.labelText}>
+                Comunidad Autónoma:
+              </label>
               <select
                 className={styles.inputField}
                 id="comunidad"
@@ -264,7 +236,6 @@ export default function Registro() {
                 ))}
               </select>
             </div>
-
             {/* Campo: Ciudad */}
             <div className={styles.formGroup}>
               <label htmlFor="ciudad" className={styles.labelText}>Ciudad:</label>
@@ -282,7 +253,6 @@ export default function Registro() {
                 ))}
               </select>
             </div>
-
             {/* Campo: Contraseña */}
             <div className={styles.formGroup}>
               <label htmlFor="contraseña" className={styles.labelText}>Contraseña:</label>
@@ -296,7 +266,6 @@ export default function Registro() {
                 onChange={(e) => setPass1(e.target.value)}
               />
             </div>
-
             {/* Campo: Confirmación de Contraseña */}
             <div className={styles.formGroup}>
               <label htmlFor="contraseña2" className={styles.labelText}>Confirmación contraseña:</label>
@@ -309,25 +278,17 @@ export default function Registro() {
                 value={pass2}
                 onChange={(e) => setPass2(e.target.value)}
               />
-              {/* Error (contraseña) */}
               {errorMsg && (
                 <p id="error_msg" style={{ color: "red", marginTop: "0.5rem" }}>
                   {errorMsg}
                 </p>
               )}
             </div>
-
-            {/* Campo: Imagen (no se envía) */}
+            {/* Campo: Imagen (opcional) */}
             <div className={styles.formGroup}>
               <label htmlFor="myfile" className={styles.labelText}>Imagen:</label>
-              <input
-                className={styles.inputField}
-                type="file"
-                id="myfile"
-                name="myfile"
-              />
+              <input className={styles.inputField} type="file" id="myfile" name="myfile" />
             </div>
-
             {/* Acciones del formulario */}
             <div className={styles.formActions}>
               <Link href="/login">
@@ -342,3 +303,5 @@ export default function Registro() {
     </Reader>
   );
 }
+
+

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Reader from "../../components/Reader";
 import styles from "./page.module.css";
+import { useEffect } from "react";
 
 export default function Login() {
   const router = useRouter();
@@ -10,6 +11,15 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+      router.push("/");
+    }
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -17,14 +27,11 @@ export default function Login() {
     try {
       console.log("Enviando petición a la API...");
   
-      const response = await fetch(
-        "https://das-p2-backend.onrender.com/api/users/login/",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-        }
-      );
+      const response = await fetch("http://127.0.0.1:8000/api/token/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
   
       console.log("Respuesta recibida, status:", response.status);
   
@@ -38,24 +45,30 @@ export default function Login() {
       const data = await response.json();
       console.log("Datos de login recibidos:", data);
   
-      // Guardamos el token y los datos de usuario en localStorage
+      // Guardamos el token y los datos del usuario en localStorage
       localStorage.setItem("token", data.access);
-      localStorage.setItem("username", data.username);
-      // Aseguramos almacenar el first_name para el mensaje de bienvenida
-      localStorage.setItem("first_name", data.first_name);
+      localStorage.setItem("username", username);
+      localStorage.setItem("refreshToken", data.refresh);
+      
   
       console.log("Datos guardados en localStorage");
   
       // Redirige a la página principal y fuerza recarga para actualizar componentes
-      router.push("/");
       window.location.reload();
+      router.push("/");
+      
+      
+      
+      
   
     } catch (error) {
       console.error("Error en la petición:", error);
       setErrorMsg("Error de conexión con el servidor");
     }
   }
-  
+  if (isLoggedIn) {
+    return null; // o un loading spinner si quieres
+  }
   return (
     <Reader>
       <main className={styles.mainLogin}>
@@ -95,7 +108,7 @@ export default function Login() {
   
           <br />
           <a className={styles.linkRegistro} href="/registro">
-            ¿No tiene cuenta?
+            ¿No tienes cuenta?
           </a>
           <br />
           <br />
