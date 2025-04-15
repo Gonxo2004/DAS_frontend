@@ -84,7 +84,7 @@ export default function EditarPerfil() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/users/${userId}/`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
