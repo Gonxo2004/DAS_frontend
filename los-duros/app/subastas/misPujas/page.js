@@ -59,15 +59,25 @@ export default function MisPujas() {
             timeLeft,
           };
         });
+        // Filtrar la puja más alta por cada subasta
+        const highestBidsPerAuction = Object.values(
+          bidsWithTime.reduce((acc, bid) => {
+            const auctionId = bid.auction.id;
+            if (!acc[auctionId] || bid.price > acc[auctionId].price) {
+              acc[auctionId] = bid;
+            }
+            return acc;
+          }, {})
+        );
 
-        setBids(bidsWithTime);
-      } catch (err) {
-        console.error(err);
-        setErrorMsg(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+        setBids(highestBidsPerAuction);
+        } catch (err) {
+          console.error(err);
+          setErrorMsg(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
 
     fetchMyBids();
   }, []);

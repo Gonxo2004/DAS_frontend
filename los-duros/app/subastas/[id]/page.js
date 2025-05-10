@@ -236,7 +236,7 @@ export default function AuctionDetails() {
                   value={newBidAmount}
                   onChange={(e) => setNewBidAmount(e.target.value)}
                   required
-                  min={bids[0] ? bids[0].price + 1 : 1}
+                  min={bids[0] ? bids[0].price + 1 : auction.price}
                 />
                 <button type="submit">Pujar</button>
               </form>
