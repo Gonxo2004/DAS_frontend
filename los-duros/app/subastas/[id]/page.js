@@ -436,7 +436,7 @@ export default function AuctionDetails() {
                   <h2><strong>{c.title}</strong></h2>
                   <p>{c.body}</p>
                   <small>
-                    Por {username} el {created}
+                    Por {c.user} el {created}
                     {modified !== created && (
                       <>
                         <br />
