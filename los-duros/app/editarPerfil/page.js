@@ -98,7 +98,7 @@ export default function EditarPerfil() {
         throw new Error(errText);
       }
 
-      localStorage.setItem("username", formData.username);
+      
       router.push("/perfil");
     } catch (err) {
       console.error("Error al actualizar:", err);

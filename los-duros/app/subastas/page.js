@@ -11,7 +11,7 @@ export default function SubastasPage() {
   const initialSearch = searchParams.get("search") || "";
   const initialCategory = searchParams.get("category") || "";
   const initialPriceMin = searchParams.get("priceMin") || "0";
-  const initialPriceMax = searchParams.get("priceMax") || "1500";
+  const initialPriceMax = searchParams.get("priceMax") || "50000";
 
   const [filterSearch, setFilterSearch] = useState(initialSearch);
   const [filterCategory, setFilterCategory] = useState(initialCategory);
@@ -143,7 +143,7 @@ export default function SubastasPage() {
               <input
                 type="range"
                 min="0"
-                max="10000"
+                max="50000" /* Aumenta el precio máximo a 50,000 */
                 step="10"
                 value={filterPriceMax}
                 onChange={(e) => setFilterPriceMax(e.target.value)}
