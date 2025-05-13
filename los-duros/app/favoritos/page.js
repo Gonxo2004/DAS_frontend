@@ -46,7 +46,6 @@ export default function WishlistPage() {
     <div>
       <header>
         <h1>Mis Favoritos</h1>
-        {/* Botón para volver a Subastas */}
         <Link href="/subastas">
           <button className={styles.btn}>Ir a Subastas</button>
         </Link>
@@ -74,7 +73,6 @@ export default function WishlistPage() {
                 <Link href={`/subastas/${product.id}`}>
                   <button className={styles.btn}>Ver más</button>
                 </Link>
-                {/* Botón para eliminar de la wishlist */}
                 <button
                   onClick={() => handleRemove(product.id)}
                   className={styles.btn}

@@ -7,24 +7,38 @@
 
 .backButton {
   margin-bottom: 1rem;
-  background-color: #ccc;
+  background-color: #ff6600; /* Naranja por defecto */
+  color: white;
   border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
+  padding: 0.6rem;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.backButton:hover {
+  background-color: black; /* Hover en negro */
 }
 
 .auctionDetailWrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns:
+    minmax(200px, 300px)  /* Columna 1: imagen */
+    minmax(300px, 1fr)    /* Columna 2: detalles */
+    minmax(300px, 300px)  /* Columna 3: pujas + valoración */
+    minmax(300px, 300px); /* Columna 4: comentarios */
   gap: 2rem;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
+  align-items: start;
 }
 
 .imageFrame {
-  flex: 1;
+  /* Columna 1 */
   max-width: 300px;
+}
+
+
+.imageFrame:hover{
+  transform: scale(1.1); /* Escala la imagen al 120% */
 }
 
 .auctionImage {
@@ -34,13 +48,12 @@
 }
 
 .detailsInfo {
-  flex: 2;
+  /* Columna 2 */
   min-width: 300px;
 }
 
 .bidSection {
-  flex: 1;
-  min-width: 250px;
+  /* Columna 3 (arriba) */
   background-color: #f9f9f9;
   padding: 1rem;
   border-radius: 10px;
@@ -65,12 +78,17 @@
 }
 
 .bidForm button {
-  background-color: #4a90e2;
+  background-color: #ff6600; /* Naranja por defecto */
   color: white;
   border: none;
   padding: 0.6rem;
   border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bidForm button:hover {
+  background-color: black; /* Hover en negro */
 }
 
 .errorMsg {
@@ -81,4 +99,169 @@
 .successMsg {
   color: green;
   margin-top: 0.5rem;
+}
+
+.ratingSection {
+  /* Columna 3 (abajo) */
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.ratingSection h2 {
+  margin-top: 0;
+}
+
+.ratingSection button {
+  background-color: #ff6600; /* Naranja por defecto */
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0.3rem;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-weight: normal;
+}
+
+.ratingSection button:hover {
+  background-color: black; /* Hover en negro */
+}
+
+.ratingSection button.selected {
+  background-color: #28a745; /* Verde seleccionado */
+  color: white;
+}
+
+.ratingSection button.unselected {
+  background-color: #ccc; /* Gris no seleccionado */
+  color: #666;
+  cursor: not-allowed;
+}
+
+.ratingSection button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.sideColumn {
+  /* Agrupa bidSection + ratingSection en columna 3 */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.commentSection {
+  /* Columna 4 */
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 1200px) {
+  .auctionDetailWrapper {
+    grid-template-columns: 1fr; /* Una sola columna en pantallas pequeñas */
+  }
+  .sideColumn {
+    order: 3;
+  }
+  .commentSection {
+    order: 4;
+  }
+}
+
+/* Ajuste general para hover de todos los botones */
+button:hover {
+  background-color: black;
+}
+
+/* --------------------------------------------- */
+/* Comentarios: cada comentario en su cajita    */
+/* --------------------------------------------- */
+
+.commentSection .commentItem {
+  background-color: #ffffff;        /* fondo blanco */
+  border: 1px solid #ddd;           /* línea gris clara */
+  border-radius: 8px;               /* esquinas redondeadas */
+  padding: 1rem;                    /* espacio interior */
+  margin-bottom: 1rem;              /* separación entre cajas */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* sombra suave */
+}
+
+.commentSection .commentItem h3 {
+  margin-top: 0;                    /* título sin margen superior */
+  margin-bottom: 0.5rem;            /* un poco de separación abajo */
+}
+
+.commentSection .commentItem p {
+  margin: 0.5rem 0;                 /* separación estándar párrafo */
+}
+
+.commentSection .commentItem small {
+  display: block;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+/* Botones de acciones dentro de cada cajita */
+.commentSection .commentActions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.commentSection .commentActions button {
+  background-color: #ff6600;  
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.commentSection .commentActions button:hover {
+  background-color: black;
+}
+
+/* posición relativa para el contenedor de cada comentario */
+.commentSection .commentItem {
+  position: relative;
+  /* … resto de estilos que ya tienes … */
+}
+
+/* contenedor de los iconos, posicionado en la esquina */
+.commentSection .commentOptions {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* estilo común a ambos botones */
+.commentSection .commentOptions button {
+  background: transparent;
+  border: none;
+  font-size: 1rem;       /* tamaño pequeño */
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* hover para visibilidad */
+.commentSection .commentOptions button:hover {
+  color: #ff6600;
+}
+
+/* si quieres distintos colores */
+.commentSection .commentOptions .deleteBtn:hover {
+  color: #dc3545; /* rojo */
 }
