@@ -37,7 +37,7 @@ export default function EditarPerfil() {
       return;
     }
 
-    fetch("http://127.0.0.1:8000/api/users/profile/", {
+    fetch("https://das-backend-1-4y45.onrender.com/api/users/profile/", {
       headers: {
         "Authorization": `Bearer ${token}`,
       },
@@ -84,7 +84,7 @@ export default function EditarPerfil() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/users/${userId}/`, {
+      const response = await fetch(`https://das-backend-1-4y45.onrender.com/api/users/${userId}/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

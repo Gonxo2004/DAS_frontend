@@ -29,7 +29,7 @@ export default function SubastasPage() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/auctions/categories/");
+        const res = await fetch("https://das-backend-1-4y45.onrender.com/api/auctions/categories/");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         setCategories(data.results ?? data ?? []);
@@ -51,7 +51,7 @@ export default function SubastasPage() {
         if (filterPriceMin)           p.append("min_price",   filterPriceMin);
         if (filterPriceMax)           p.append("max_price",   filterPriceMax);
 
-        const listRes = await fetch(`http://127.0.0.1:8000/api/auctions/?${p.toString()}`);
+        const listRes = await fetch(`https://das-backend-1-4y45.onrender.com/api/auctions/?${p.toString()}`);
         if (!listRes.ok) throw new Error(`HTTP ${listRes.status}`);
         let fetched = (await listRes.json()).results ?? [];
 
@@ -61,7 +61,7 @@ export default function SubastasPage() {
               return a;
             }
             try {
-              const detailRes = await fetch(`http://127.0.0.1:8000/api/auctions/${a.id}/`);
+              const detailRes = await fetch(`https://das-backend-1-4y45.onrender.com/api/auctions/${a.id}/`);
               if (detailRes.ok) {
                 const detail = await detailRes.json();
                 return { ...a, average_rating: detail.average_rating };

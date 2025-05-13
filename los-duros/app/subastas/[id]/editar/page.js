@@ -33,7 +33,7 @@ export default function EditarSubasta() {
     }
 
     // Cargar subasta
-    fetch(`http://127.0.0.1:8000/api/auctions/${id}/`, {
+    fetch(`https://das-backend-1-4y45.onrender.com/api/auctions/${id}/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -53,7 +53,7 @@ export default function EditarSubasta() {
       });
 
     // Cargar categorías
-    fetch("http://127.0.0.1:8000/api/auctions/categories")
+    fetch("https://das-backend-1-4y45.onrender.com/api/auctions/categories")
       .then((res) => res.json())
       .then((data) => {
         const cats = Array.isArray(data.results) ? data.results : [];
@@ -74,7 +74,7 @@ export default function EditarSubasta() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/`, {
+      const response = await fetch(`https://das-backend-1-4y45.onrender.com/api/auctions/${id}/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

@@ -22,7 +22,7 @@ export default function MisPujas() {
 
     const fetchMyBids = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/auctions/mybids/", {
+        const res = await fetch("https://das-backend-1-4y45.onrender.com/api/auctions/mybids/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) {
@@ -105,7 +105,7 @@ export default function MisPujas() {
     }
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/api/auctions/${auctionId}/bid/${bidId}/`,
+        `https://das-backend-1-4y45.onrender.com/api/auctions/${auctionId}/bid/${bidId}/`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },

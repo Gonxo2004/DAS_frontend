@@ -44,8 +44,8 @@ export default function AuctionDetails() {
     try {
       // Subasta + pujas
       const [aRes, bRes] = await Promise.all([
-        fetch(`http://127.0.0.1:8000/api/auctions/${id}/`),
-        fetch(`http://127.0.0.1:8000/api/auctions/${id}/bid/`),
+        fetch(`https://das-backend-1-4y45.onrender.com/api/auctions/${id}/`),
+        fetch(`https://das-backend-1-4y45.onrender.com/api/auctions/${id}/bid/`),
       ]);
       if (!aRes.ok) throw new Error("Error cargando subasta.");
       if (!bRes.ok) throw new Error("Error cargando pujas.");
@@ -57,7 +57,7 @@ export default function AuctionDetails() {
       // Rating actual del usuario
       if (token && username) {
         const rRes = await fetch(
-          `http://127.0.0.1:8000/api/auctions/${id}/ratings/`,
+          `https://das-backend-1-4y45.onrender.com/api/auctions/${id}/ratings/`,
           { headers }
         );
         if (rRes.ok) {
@@ -71,7 +71,7 @@ export default function AuctionDetails() {
 
       // Comentarios
       const cRes = await fetch(
-        `http://127.0.0.1:8000/api/auctions/${id}/comments/`
+        `https://das-backend-1-4y45.onrender.com/api/auctions/${id}/comments/`
       );
       if (!cRes.ok) throw new Error("Error cargando comentarios.");
       const cData = await cRes.json();
@@ -113,7 +113,7 @@ export default function AuctionDetails() {
     if (!token) return setErrorMsg("Inicia sesión para pujar.");
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/api/auctions/${id}/bid/`,
+        `https://das-backend-1-4y45.onrender.com/api/auctions/${id}/bid/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json", ...headers },
@@ -133,8 +133,8 @@ export default function AuctionDetails() {
     if (!token) return router.push("/login");
     const editing = Boolean(userRating);
     const url = editing
-      ? `http://127.0.0.1:8000/api/auctions/${id}/ratings/${userRating.id}/`
-      : `http://127.0.0.1:8000/api/auctions/${id}/ratings/`;
+      ? `https://das-backend-1-4y45.onrender.com/api/auctions/${id}/ratings/${userRating.id}/`
+      : `https://das-backend-1-4y45.onrender.com/api/auctions/${id}/ratings/`;
     const body = editing ? { value: v } : { value: v, auction: id };
     try {
       const res = await fetch(url, {
@@ -152,7 +152,7 @@ export default function AuctionDetails() {
     if (!userRating) return;
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/api/auctions/${id}/ratings/${userRating.id}/`,
+        `https://das-backend-1-4y45.onrender.com/api/auctions/${id}/ratings/${userRating.id}/`,
         { method: "DELETE", headers }
       );
       if (!res.ok) throw new Error(await res.text());
@@ -169,7 +169,7 @@ export default function AuctionDetails() {
     if (!token) return setErrorMsg("Inicia sesión para comentar.");
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/api/auctions/${id}/comments/`,
+        `https://das-backend-1-4y45.onrender.com/api/auctions/${id}/comments/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json", ...headers },
@@ -202,7 +202,7 @@ export default function AuctionDetails() {
     setErrorMsg("");
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/api/auctions/${id}/comments/${editingComment}/`,
+        `https://das-backend-1-4y45.onrender.com/api/auctions/${id}/comments/${editingComment}/`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json", ...headers },
@@ -224,7 +224,7 @@ export default function AuctionDetails() {
   const handleDelete = async (commentId) => {
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/api/auctions/${id}/comments/${commentId}/`,
+        `https://das-backend-1-4y45.onrender.com/api/auctions/${id}/comments/${commentId}/`,
         { method: "DELETE", headers }
       );
       if (!res.ok) throw new Error(await res.text());
