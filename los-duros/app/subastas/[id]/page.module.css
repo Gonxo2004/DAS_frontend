@@ -176,10 +176,6 @@
   }
 }
 
-/* Ajuste general para hover de todos los botones */
-button:hover {
-  background-color: black;
-}
 
 /* --------------------------------------------- */
 /* Comentarios: cada comentario en su cajita    */
