@@ -4,7 +4,6 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
 
-
 export default function SubastasPage() {
   const searchParams = useSearchParams();
 
@@ -15,7 +14,6 @@ export default function SubastasPage() {
   const initialRatingMin = searchParams.get("minRating") || "";   
   const initialStatus    = searchParams.get("status")    || "";   
 
- 
   const [filterSearch,    setFilterSearch]    = useState(initialSearch);
   const [filterCategory,  setFilterCategory]  = useState(initialCategory);
   const [filterPriceMin,  setFilterPriceMin]  = useState(initialPriceMin);
@@ -23,12 +21,10 @@ export default function SubastasPage() {
   const [filterRatingMin, setFilterRatingMin] = useState(initialRatingMin);
   const [filterStatus,    setFilterStatus]    = useState(initialStatus);
 
-
   const [categories, setCategories] = useState([]);
   const [products,   setProducts]   = useState([]);
   const [loading,    setLoading]    = useState(true);
   const [showFilters,setShowFilters]= useState(false);
-
 
   useEffect(() => {
     (async () => {
@@ -110,7 +106,6 @@ export default function SubastasPage() {
     filterStatus,
   ]);
 
-  
   const handleResetFilters = () => {
     setFilterSearch("");
     setFilterCategory("");
@@ -120,7 +115,6 @@ export default function SubastasPage() {
     setFilterStatus("");
   };
 
-  
   const handleAddToWishlist = (product) => {
     const wl = JSON.parse(localStorage.getItem("wishlist") || "[]");
     if (!wl.some((i) => i.id === product.id)) {
@@ -128,7 +122,6 @@ export default function SubastasPage() {
     }
   };
 
-  
   return (
     <div className={styles.container}>
       <div className={styles.filtersHeader}>
@@ -258,3 +251,4 @@ export default function SubastasPage() {
     </div>
   );
 }
+
