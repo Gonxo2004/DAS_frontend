@@ -251,7 +251,6 @@ export default function AuctionDetails() {
       </div>
     );
 
-  const closing = new Date(auction.closing_date).toLocaleString();
 
   return (
     <div className={styles.detailContainer}>

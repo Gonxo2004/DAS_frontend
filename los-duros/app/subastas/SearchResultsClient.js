@@ -4,28 +4,18 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
 
-/**
- * Página de listado de subastas / productos destacados con filtros:
- *   • Texto, categoría, rango de precios (min-max)
- *   • Valoración mínima ★ (obtenida del backend)
- *   • Estado (abiertas / cerradas)
- *
- * Para disponer de la valoración media (average_rating) aunque el endpoint
- * /api/auctions/ no la devuelva, hacemos una petición adicional por cada
- * subasta a /api/auctions/{id}/ y la añadimos al objeto antes de filtrar.
- */
+
 export default function SubastasPage() {
   const searchParams = useSearchParams();
 
-  /* ───── valores iniciales (por query-string) ───── */
   const initialSearch    = searchParams.get("search")    || "";
   const initialCategory  = searchParams.get("category")  || "";
   const initialPriceMin  = searchParams.get("priceMin")  || "0";
   const initialPriceMax  = searchParams.get("priceMax")  || "50000";
-  const initialRatingMin = searchParams.get("minRating") || "";   // ★
-  const initialStatus    = searchParams.get("status")    || "";   // abierta / cerrada / ""
+  const initialRatingMin = searchParams.get("minRating") || "";   
+  const initialStatus    = searchParams.get("status")    || "";   
 
-  /* ───── estados de filtros ───── */
+ 
   const [filterSearch,    setFilterSearch]    = useState(initialSearch);
   const [filterCategory,  setFilterCategory]  = useState(initialCategory);
   const [filterPriceMin,  setFilterPriceMin]  = useState(initialPriceMin);
@@ -33,13 +23,13 @@ export default function SubastasPage() {
   const [filterRatingMin, setFilterRatingMin] = useState(initialRatingMin);
   const [filterStatus,    setFilterStatus]    = useState(initialStatus);
 
-  /* ───── datos y control de UI ───── */
+
   const [categories, setCategories] = useState([]);
   const [products,   setProducts]   = useState([]);
   const [loading,    setLoading]    = useState(true);
   const [showFilters,setShowFilters]= useState(false);
 
-  /* ───── cargar categorías (una vez) ───── */
+
   useEffect(() => {
     (async () => {
       try {
@@ -54,13 +44,11 @@ export default function SubastasPage() {
     })();
   }, []);
 
-  /* ───── cargar subastas cada vez que cambie un filtro ───── */
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
 
-        /* filtros que soporta la API */
         const p = new URLSearchParams();
         if (filterSearch.length >= 3) p.append("search",      filterSearch);
         if (filterCategory)           p.append("category_id", filterCategory);
@@ -71,10 +59,8 @@ export default function SubastasPage() {
         if (!listRes.ok) throw new Error(`HTTP ${listRes.status}`);
         let fetched = (await listRes.json()).results ?? [];
 
-        /* ───── enriquecemos cada subasta con average_rating ───── */
         fetched = await Promise.all(
           fetched.map(async (a) => {
-            // Si ya viene average_rating, no hacemos nada
             if (a.average_rating !== undefined && a.average_rating !== null) {
               return a;
             }
@@ -91,7 +77,6 @@ export default function SubastasPage() {
           })
         );
 
-        /* ───── filtros aplicados en cliente ───── */
         let filtered = [...fetched];
 
         if (filterRatingMin) {
@@ -125,7 +110,7 @@ export default function SubastasPage() {
     filterStatus,
   ]);
 
-  /* ───── reset filtros ───── */
+  
   const handleResetFilters = () => {
     setFilterSearch("");
     setFilterCategory("");
@@ -135,7 +120,7 @@ export default function SubastasPage() {
     setFilterStatus("");
   };
 
-  /* ───── wishlist (localStorage) ───── */
+  
   const handleAddToWishlist = (product) => {
     const wl = JSON.parse(localStorage.getItem("wishlist") || "[]");
     if (!wl.some((i) => i.id === product.id)) {
@@ -143,10 +128,9 @@ export default function SubastasPage() {
     }
   };
 
-  /* ───── render ───── */
+  
   return (
     <div className={styles.container}>
-      {/* Header */}
       <div className={styles.filtersHeader}>
         <h1 style={{ textAlign: "center", width: "100%" }}>PRODUCTOS DESTACADOS</h1>
         <button
@@ -159,11 +143,9 @@ export default function SubastasPage() {
         </button>
       </div>
 
-      {/* Panel de filtros */}
       {showFilters && (
         <div className={styles.filtersDropdown}>
           <form className={styles.filterForm} onSubmit={(e) => e.preventDefault()}>
-            {/* búsqueda */}
             <input
               type="text"
               placeholder="Buscar productos…"
@@ -172,7 +154,6 @@ export default function SubastasPage() {
               className={styles.filterInput}
             />
 
-            {/* categoría */}
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
@@ -184,7 +165,6 @@ export default function SubastasPage() {
               ))}
             </select>
 
-            {/* precio */}
             <div className={styles.sliderContainer}>
               <label>Precio mínimo: <strong>{filterPriceMin}€</strong></label>
               <input
@@ -204,7 +184,6 @@ export default function SubastasPage() {
               />
             </div>
 
-            {/* rating mínimo */}
             <select
               value={filterRatingMin}
               onChange={(e) => setFilterRatingMin(e.target.value)}
@@ -218,7 +197,6 @@ export default function SubastasPage() {
               <option value="5">5★</option>
             </select>
 
-            {/* estado */}
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
@@ -238,7 +216,6 @@ export default function SubastasPage() {
         </div>
       )}
 
-      {/* listado */}
       <main className={styles.mainResults}>
         {loading ? (
           <p>Cargando productos…</p>
