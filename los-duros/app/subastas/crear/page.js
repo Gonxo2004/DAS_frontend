@@ -65,7 +65,6 @@ export default function CrearSubasta() {
           thumbnail: formData.thumbnail,
           price: parseFloat(formData.price),
           stock: parseInt(formData.stock),
-          rating: parseInt(formData.rating),
           brand: formData.brand,
           category: formData.category,
         }),
@@ -166,19 +165,6 @@ export default function CrearSubasta() {
             value={formData.stock}
             onChange={handleChange}
             min="1"
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.labelText}>Valoración (1-5):</label>
-          <input
-            type="number"
-            name="rating"
-            className={styles.inputField}
-            value={formData.rating}
-            onChange={handleChange}
-            min="1"
-            max="5"
             required
           />
         </div>

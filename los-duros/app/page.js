@@ -20,8 +20,6 @@ export default function Home() {
 
   return (
     <>
-      {/* Aquí va tu navbar (si está en layout.js/layout.tsx, perfecto) */}
-
       <section className={styles.heroSection}>
         <div className={styles.overlay}>
           <div className={styles.hero}>

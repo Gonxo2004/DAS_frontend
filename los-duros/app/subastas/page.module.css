@@ -1,4 +1,4 @@
-/* Contenedor principal: asegura margen superior para que no se solape con el navbar global */
+
 .container {
   margin-top: 80px; /* Ajusta este valor según la altura de tu navbar global */
 }

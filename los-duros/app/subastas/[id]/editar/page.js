@@ -47,7 +47,6 @@ export default function EditarSubasta() {
           thumbnail: data.thumbnail,
           price: data.price,
           stock: data.stock,
-          rating: data.rating,
           category: data.category,
           brand: data.brand,
         });
@@ -86,7 +85,6 @@ export default function EditarSubasta() {
           closing_date: new Date(formData.closing_date).toISOString(),
           price: parseFloat(formData.price),
           stock: parseInt(formData.stock),
-          rating: parseInt(formData.rating),
           category: formData.category,
         }),
       });
@@ -170,16 +168,6 @@ export default function EditarSubasta() {
             type="number"
             name="stock"
             value={formData.stock}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label>Valoración (1-5):</label>
-          <input
-            type="number"
-            name="rating"
-            value={formData.rating}
             onChange={handleChange}
             required
           />
