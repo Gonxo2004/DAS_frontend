@@ -29,7 +29,7 @@ export default function ChangePasswordPage() {
     }
   
     try {
-      const response = await fetch("https://das-backend-1-4y45.onrender.com/api/users/change-password/", {
+      const response = await fetch("https://das-backend-final.onrender.com/api/users/change-password/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -26,7 +26,7 @@ export default function CrearSubasta() {
     const token = localStorage.getItem("token");
     if (!token) router.push("/login");
   
-    fetch("https://das-backend-1-4y45.onrender.com/api/auctions/categories/")
+    fetch("https://das-backend-final.onrender.com/api/auctions/categories/")
       .then((res) => res.json())
       .then((data) => {
         console.log("Categorías recibidas:", data);
@@ -52,7 +52,7 @@ export default function CrearSubasta() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("https://das-backend-1-4y45.onrender.com/api/auctions/", {
+      const response = await fetch("https://das-backend-final.onrender.com/api/auctions/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -23,7 +23,7 @@ export default function Usuario() {
     // Si sí hay token, marcamos que está logueado e intentamos cargar el perfil
     setIsLoggedIn(true);
 
-    fetch("https://das-backend-1-4y45.onrender.com/api/users/profile/", {
+    fetch("https://das-backend-final.onrender.com/api/users/profile/", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -67,7 +67,7 @@ export default function Usuario() {
         throw new Error("No se encontraron tokens.");
       }
 
-      const response = await fetch("https://das-backend-1-4y45.onrender.com/api/users/log-out/", {
+      const response = await fetch("https://das-backend-final.onrender.com/api/users/log-out/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -94,7 +94,7 @@ export default function Registro() {
     };
 
     try {
-      const response = await fetch("https://das-backend-1-4y45.onrender.com/api/users/register/", {
+      const response = await fetch("https://das-backend-final.onrender.com/api/users/register/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

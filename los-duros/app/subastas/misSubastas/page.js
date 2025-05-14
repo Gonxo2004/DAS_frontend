@@ -18,7 +18,7 @@ export default function MisSubastasPage() {
     setIsLoggedIn(true);
 
     // Cargar perfil
-    fetch("https://das-backend-1-4y45.onrender.com/api/users/profile/", {
+    fetch("https://das-backend-final.onrender.com/api/users/profile/", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -33,7 +33,7 @@ export default function MisSubastasPage() {
       .then((user) => {
         setCurrentUser(user);
         // Cargar todas las subastas y filtrar las del usuario
-        return fetch("https://das-backend-1-4y45.onrender.com/api/auctions/", {
+        return fetch("https://das-backend-final.onrender.com/api/auctions/", {
           headers: { Authorization: `Bearer ${token}` },
         });
       })
@@ -73,7 +73,7 @@ export default function MisSubastasPage() {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`https://das-backend-1-4y45.onrender.com/api/auctions/${id}/`, {
+      const response = await fetch(`https://das-backend-final.onrender.com/api/auctions/${id}/`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

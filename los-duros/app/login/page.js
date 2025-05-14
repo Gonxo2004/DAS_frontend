@@ -27,7 +27,7 @@ export default function Login() {
     try {
       console.log("Enviando petición a la API...");
   
-      const response = await fetch("https://das-backend-1-4y45.onrender.com/api/token/", {
+      const response = await fetch("https://das-backend-final.onrender.com/api/token/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
